@@ -22,7 +22,6 @@
 #include <QMessageBox>
 
 #include <QDebug>
-#include <QTimer>
 #include <cstdio>
 
 extern "C" {
