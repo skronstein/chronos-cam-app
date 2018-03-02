@@ -72,10 +72,10 @@ private slots:
     void on_cmdRecMode_clicked();
 
     void on_cmdDelaySettings_clicked();
-
+/*
     void on_lineExp_selectionChanged();
     void on_linePeriod_selectionChanged();
-
+*/
 private:
 	void updateOffsetLimits();
 	void updateInfoText();

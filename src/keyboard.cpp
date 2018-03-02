@@ -16,6 +16,7 @@
  ****************************************************************************/
 #include "keyboard.h"
 #include "ui_keyboard.h"
+#include "camLineEdit.h"
 
 keyboard::keyboard(QWidget *parent) :
 	QDialog(parent),
@@ -143,9 +144,9 @@ void keyboard::selectAllInFocusedWidget(){
 
 	if(senderClass == "CamLineEdit")
 	{
-		QLineEdit *lineEdit = qobject_cast<QLineEdit*>(lastFocusedWidget);
+		CamLineEdit *lineEdit = qobject_cast<CamLineEdit*>(lastFocusedWidget);
 		emit codeGenerated(KC_BACKSPACE);
-		lineEdit->selectAll();
+		lineEdit->selectText();
 	}
 
 	if(senderClass.contains("SpinBox"))

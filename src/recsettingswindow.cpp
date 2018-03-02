@@ -21,6 +21,7 @@
 #include <QMessageBox>
 
 #include <QDebug>
+#include <QTimer>
 #include <cstdio>
 
 extern "C" {
@@ -789,10 +790,10 @@ void RecSettingsWindow::on_cmdDelaySettings_clicked()
         w->show();
     }
 }
-
+/*
 void RecSettingsWindow::on_lineExp_selectionChanged(){
 	if(ui->lineExp->text()[ui->lineExp->text().length() - 1].isLetter()){
-		ui->lineExp->setSelection(0, ui->lineExp->text().length() - 2);
+		QTimer::singleShot(10, ui->lineExp, SLOT(setSelection(0, ui->lineExp->text().length() - 2)));
 		qDebug()<<"last is letter.  set selection to legnth - 2";
 	}
 }
@@ -801,3 +802,5 @@ void RecSettingsWindow::on_linePeriod_selectionChanged()
 {
 
 }
+*/
+

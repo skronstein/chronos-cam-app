@@ -25,6 +25,8 @@ class CamLineEdit : public QLineEdit
 public:
 	explicit CamLineEdit(QWidget * parent = 0);
 
+public slots:
+	void selectText();
 protected:
   virtual void focusInEvent(QFocusEvent *e);
   virtual void focusOutEvent(QFocusEvent *e);

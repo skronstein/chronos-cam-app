@@ -39,3 +39,10 @@ void CamLineEdit::mouseReleaseEvent(QMouseEvent *)
 	QEvent event(QEvent::RequestSoftwareInputPanel);	//Call up the software input panel
 	qApp->sendEvent(this, &event);
 }
+
+void CamLineEdit::selectText(){
+	if(text()[text().length() - 1].isLetter()){
+		setSelection(0, text().length() - 2);
+		qDebug()<<"last is letter.  set selection to legnth - 2";
+	}
+}
