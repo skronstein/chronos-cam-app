@@ -22,6 +22,7 @@ CamLineEdit::CamLineEdit(QWidget *parent) :
 	QLineEdit(parent)
 {
 	//qDebug() << "CamLineEdit Consturcted";
+	hasUnits = false;
 }
 
 void CamLineEdit::focusInEvent(QFocusEvent *e)
@@ -41,8 +42,16 @@ void CamLineEdit::mouseReleaseEvent(QMouseEvent *)
 }
 
 void CamLineEdit::selectText(){
-	if(text()[text().length() - 1].isLetter()){
+	if(text()[text().length() - 1].isLetter() && this->hasUnits){
 		setSelection(0, text().length() - 2);
 		qDebug()<<"last is letter.  set selection to legnth - 2";
 	}
+	else selectAll();
+}
+
+bool CamLineEdit::getHasUnits(){
+	return hasUnits;
+}
+void CamLineEdit::setHasUnits(bool value){
+	hasUnits = value;
 }

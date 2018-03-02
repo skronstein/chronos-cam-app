@@ -18,6 +18,7 @@
 #include "ui_recsettingswindow.h"
 #include "recmodewindow.h"
 #include "triggerdelaywindow.h"
+#include "camLineEdit.h"
 #include <QMessageBox>
 
 #include <QDebug>
@@ -139,16 +140,19 @@ RecSettingsWindow::RecSettingsWindow(QWidget *parent, Camera * cameraInst) :
     double framePeriod = (double)is->period / 100000000.0;
 	getSIText(str, framePeriod, 10, DEF_SI_OPTS, 8);
 	ui->linePeriod->setText(str);
+	ui->linePeriod->setHasUnits(true);
 
 	//Set the frame rate
 	double frameRate = 1.0 / framePeriod;
 	getSIText(str, frameRate, ceil(log10(framePeriod*100000000.0)+1), DEF_SI_OPTS, 1000);
 	ui->lineRate->setText(str);
+	ui->lineRate->setHasUnits(true);
 
 	//Set the exposure
     double exposure = (double)is->exposure / 100000000.0;
 	getSIText(str, exposure, 10, DEF_SI_OPTS, 8);
 	ui->lineExp->setText(str);
+	ui->lineExp->setHasUnits(true);
 
 
 	ui->frameImage->setGeometry(QRect(ui->spinHOffset->value()/4, ui->spinVOffset->value()/4, ui->spinHRes->value()/4, ui->spinVRes->value()/4));

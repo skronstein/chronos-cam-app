@@ -24,6 +24,11 @@ class CamLineEdit : public QLineEdit
 	Q_OBJECT
 public:
 	explicit CamLineEdit(QWidget * parent = 0);
+	bool getHasUnits();
+	void setHasUnits(bool value);
+
+private:
+	bool hasUnits;
 
 public slots:
 	void selectText();
