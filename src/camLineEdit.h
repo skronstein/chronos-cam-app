@@ -26,12 +26,11 @@ public:
 	explicit CamLineEdit(QWidget * parent = 0);
 	bool getHasUnits();
 	void setHasUnits(bool value);
+	void selectText();
 
 private:
 	bool hasUnits;
 
-public slots:
-	void selectText();
 protected:
   virtual void focusInEvent(QFocusEvent *e);
   virtual void focusOutEvent(QFocusEvent *e);
