@@ -353,6 +353,8 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * senso
 
 	loadColGainFromFile("cal/dcgL.bin");
 
+	blackCalIsNeeded = false;
+
 	if(CAMERA_FILE_NOT_FOUND == loadFPNFromFile(FPN_FILENAME))
 		autoFPNCorrection(2, false, true);
 	/*

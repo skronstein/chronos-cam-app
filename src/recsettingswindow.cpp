@@ -156,6 +156,7 @@ RecSettingsWindow::RecSettingsWindow(QWidget *parent, Camera * cameraInst) :
 	updateInfoText();
 
     qDebug() << "---- Rec Settings Window ---- Init complete";
+
     windowInitComplete = true;  //This is used to avoid control on_change events firing with incomplete values populated
 }
 
@@ -201,11 +202,16 @@ void RecSettingsWindow::on_cmdOK_clicked()
     is->exposure = exp * 100000000.0;
 
     is->temporary = 0;
+    ImagerSettings_t is_old = camera->getImagerSettings();
+    if(is->hRes != is_old.hRes || is->vRes != is_old.vRes || (is->exposure != is_old.exposure && camera->sensor->wavetableSize < 40)) {camera->blackCalIsNeeded = true;}
+    qDebug()<<"black cal needed: " << camera->blackCalIsNeeded;
+
     camera->setImagerSettings(*is);
     camera->setDisplaySettings(false, MAX_LIVE_FRAMERATE);
 
 	if(CAMERA_FILE_NOT_FOUND == camera->loadFPNFromFile(FPN_FILENAME))
 		camera->autoFPNCorrection(2, false, true);
+
 
 	close();
 }

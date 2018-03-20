@@ -263,6 +263,7 @@ void CamMainWindow::on_cmdRecSettings_clicked()
 
 void CamMainWindow::on_cmdFPNCal_clicked()//Black cal
 {
+	camera->blackCalIsNeeded = false;
 	if(camera->getIsRecording()) {
 		QMessageBox::StandardButton reply;
 		reply = QMessageBox::question(this, "Stop recording?", "This action will stop recording and erase the video; is this okay?", QMessageBox::Yes|QMessageBox::No);
@@ -488,6 +489,7 @@ void CamMainWindow::recSettingsClosed()
 	ui->expSlider->setMinimum(LUX1310_MIN_INT_TIME * 100000000.0);
 	ui->expSlider->setMaximum(camera->sensor->getMaxCurrentIntegrationTime() * 100000000.0);
 	ui->expSlider->setValue(camera->sensor->getIntegrationTime() * 100000000.0);
+	if(camera->blackCalIsNeeded) on_cmdFPNCal_clicked();
 	updateCurrentSettingsLabel();
 }
 

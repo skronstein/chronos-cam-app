@@ -217,6 +217,7 @@ public:
 	void computeFPNCorrection2(UInt32 framesToAverage, bool writeToFile = false, bool factory = false);
 	UInt32 autoFPNCorrection(UInt32 framesToAverage, bool writeToFile = false, bool noCap = false, bool factory = false);
 	Int32 loadFPNFromFile(const char * filename);
+	bool blackCalIsNeeded; //so that camMainWindow will know whether or not black cal has to be performed when returning from recSettingsWindow
 	Int32 computeColGainCorrection(UInt32 framesToAverage, bool writeToFile = false);
 	Int32 loadColGainFromFile(const char * filename);
 	UInt32 adcOffsetCorrection(UInt32 iterations, const char * filename = "");
