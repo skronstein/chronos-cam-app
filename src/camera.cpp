@@ -2540,7 +2540,9 @@ Int32 Camera::startSave(UInt32 startFrame, UInt32 length)
 	if(startFrame + length > recordingData.totalFrames)
 		return CAMERA_INVALID_SETTINGS;
 
+	qDebug()<<"about to setRunning()";
 	vinst->setRunning(false);
+	qDebug()<<"done setRunning()";
 	delayms(100); //Gstreamer crashes with no delay here, OMX needs time to deinit stuff?
     setDisplaySettings(true, MAX_RECORD_FRAMERATE);	//Set to encoder safe mode, and increase the framerate.
 

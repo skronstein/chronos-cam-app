@@ -497,10 +497,13 @@ UInt32 VideoRecord::stop()
 
 UInt32 VideoRecord::stop2()
 {
+	qDebug()<<"Stop2 started. about to call gst_event_new_eos()";
 	if(!running)
 		return RECORD_NOT_RUNNING;
 
+	qDebug()<<"about to gst_event_new_eos()";
 	GstEvent*  event = gst_event_new_eos();
+	qDebug()<<"about to gst_element_send_event()";
 	 gst_element_send_event(pipeline, event);
 	return SUCCESS;
 }

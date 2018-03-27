@@ -101,5 +101,5 @@ void PlaybackSlider::appendRegionToList(){
 
 void PlaybackSlider::removeLastRegionFromList()
 {
-	previouslySavedRegions.removeLast();
+	//previouslySavedRegions.removeLast();
 }
