@@ -144,6 +144,7 @@ Camera::~Camera()
 
 CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * sensorInst, UserInterface * userInterface, UInt32 ramSizeVal, bool color)
 {
+	qDebug()<<"Camera::init()";
 	//int FRAME_SIZE = 1280*1024*12/8;
 	CameraErrortype retVal;
     UInt32 ramSizeGBSlot0, ramSizeGBSlot1;
@@ -341,15 +342,19 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * senso
 	setImagerSettings(settings);
     setDisplaySettings(false, MAX_LIVE_FRAMERATE);
 
+    qDebug()<<"setRunning true init";
 	vinst->setRunning(true);
+	qDebug()<<"setRunning true init done. about to do new VideoRecord()";
 
 	recorder = new VideoRecord();
 
+	qDebug()<<"new VideoRecord() created. about to do recordEosCallback";
     recorder->eosCallback = recordEosCallback;
 	recorder->eosCallbackArg = (void *)this;
 
 	recorder->errorCallback = recordErrorCallback;
 	recorder->errorCallbackArg = (void *)this;
+	qDebug()<<"recordErrorCallback done";
 
 	loadColGainFromFile("cal/dcgL.bin");
 
@@ -550,8 +555,10 @@ UInt32 Camera::setDisplaySettings(bool encoderSafe, UInt32 maxFps)
 
 	//Stop live video if running
 	bool running = vinst->isRunning();
-	if(running)
+	if(running){
+		qDebug()<<"setRunning false setDisplaySettings()";
 		vinst->setRunning(false);
+	}
 
     setLiveOutputTiming(imagerSettings.hRes, imagerSettings.vRes,
 			imagerSettings.hRes, imagerSettings.vRes,
@@ -560,8 +567,10 @@ UInt32 Camera::setDisplaySettings(bool encoderSafe, UInt32 maxFps)
 	vinst->setImagerResolution(imagerSettings.hRes, imagerSettings.vRes);
 
 	//Restart live video if it was running
-	if(running)
+	if(running){
 		vinst->setRunning(true);
+		qDebug()<<"setrunning setDisplaySettings true";
+	}
 
 	return SUCCESS;
 }
@@ -639,7 +648,7 @@ Int32 Camera::setRecSequencerModeNormal()
 	pgmWord.settings.pad = 0;
 
     qDebug() << "Setting record sequencer mode to" << (imagerSettings.mode == RECORD_MODE_NORMAL ? "normal" : "segmented") << ", disableRingBuffer =" << imagerSettings.disableRingBuffer << "segments ="
-	     << imagerSettings.segments << "blkSize =" << pgmWord.settings.blkSize;
+		<< imagerSettings.segments << "blkSize =" << pgmWord.settings.blkSize;
 	writeSeqPgmMem(pgmWord, 0);
 
 	setFrameSizeWords(imagerSettings.frameSizeWords);
@@ -777,7 +786,7 @@ void Camera::endOfRec(void)
 			numBlocks++;
 
 	    qDebug() << "--- Sequencer --- Found block, size:" << blockFrames << ", location:" << lastRecDataPos << ", total frames:" << frames
-		     << ", total blocks:" << numBlocks << "Start addr:" << recData[lastRecDataPos].blockStart << ", End addr:" << recData[lastRecDataPos].blockEnd;
+			<< ", total blocks:" << numBlocks << "Start addr:" << recData[lastRecDataPos].blockStart << ", End addr:" << recData[lastRecDataPos].blockEnd;
 
 			if(0 == lastRecDataPos)
 				lastRecDataPos = RECORD_DATA_LENGTH - 1;
@@ -2540,7 +2549,7 @@ Int32 Camera::startSave(UInt32 startFrame, UInt32 length)
 	if(startFrame + length > recordingData.totalFrames)
 		return CAMERA_INVALID_SETTINGS;
 
-	qDebug()<<"about to setRunning()";
+	qDebug()<<"about to setRunning() startsave false";
 	vinst->setRunning(false);
 	qDebug()<<"done setRunning()";
 	delayms(100); //Gstreamer crashes with no delay here, OMX needs time to deinit stuff?
@@ -2560,7 +2569,8 @@ Int32 Camera::startSave(UInt32 startFrame, UInt32 length)
 
 	if(retVal != SUCCESS)
     {
-		vinst->setRunning(true);
+		qDebug()<<"setrunning startsave(second time) true";
+				vinst->setRunning(true);
 		if(RECORD_DIRECTORY_NOT_WRITABLE == retVal)
 			return RECORD_DIRECTORY_NOT_WRITABLE;
 		else if(RECORD_FILE_EXISTS == retVal)
@@ -2731,6 +2741,7 @@ Int32 Camera::blackCalAllStdRes(bool factory)
 	FILE * fp;
 	char line[30];
 
+	qDebug()<<"setrunning blaccal";
 	vinst->setRunning(false);
 
 	fp = fopen("resolutions", "r");
@@ -2806,6 +2817,7 @@ Int32 Camera::blackCalAllStdRes(bool factory)
 	if(SUCCESS != retVal)
 		return retVal;
 
+	qDebug()<<"setrunning blaccal 2nd call";
 	vinst->setRunning(true);
 
 	return SUCCESS;
@@ -3140,8 +3152,11 @@ void recordEosCallback(void * arg)
 	camera->recorder->stop();
     camera->setDisplaySettings(false, MAX_LIVE_FRAMERATE);
 	camera->gpmc->write16(DISPLAY_PIPELINE_ADDR, 0x0000); // turn off raw/bipass modes, if they're set
+	qDebug()<<"setrunning recordEosCallback";
 	camera->vinst->setRunning(true);
+	qDebug()<<"setrunning recordEosCallback finished.  About to fflush(stdout)";
 	fflush(stdout);
+	qDebug()<<"fflush(stdout); done. Exiting recordEosCallback()";
 }
 
 void recordErrorCallback(void * arg, char * message)

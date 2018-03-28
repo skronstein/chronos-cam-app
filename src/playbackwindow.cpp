@@ -111,6 +111,8 @@ void playbackWindow::on_cmdPlayReverse_released()
 
 void playbackWindow::on_cmdSave_clicked()
 {
+	qDebug()<<"SaveSettings_clicked";
+
 	UInt32 ret;
 	QMessageBox msg;
 	char parentPath[1000];
@@ -123,7 +125,8 @@ void playbackWindow::on_cmdSave_clicked()
 	strcat(parentPath, "/..");
 
 	if(!camera->recorder->getRunning())
-	{
+	{//This block is executed when the button is clicked when it says Save (not Abort)
+		qDebug()<<"not running.  Will try to save video";
 		//If no directory set, complain to the user
 		if(strlen(camera->recorder->fileDirectory) == 0)
 		{
@@ -235,6 +238,7 @@ void playbackWindow::on_cmdSave_clicked()
 	else
 	{
 		//This block is executed when Abort is clicked
+		qDebug()<<"is running.  Will try abort";
 		camera->recorder->stop2();
 		ui->verticalSlider->removeLastRegionFromList();
 		markInFrame = markInFrameOld;

@@ -505,6 +505,7 @@ UInt32 VideoRecord::stop2()
 	GstEvent*  event = gst_event_new_eos();
 	qDebug()<<"about to gst_element_send_event()";
 	 gst_element_send_event(pipeline, event);
+	qDebug()<<"gst_element_send_event() finished";
 	return SUCCESS;
 }
 
