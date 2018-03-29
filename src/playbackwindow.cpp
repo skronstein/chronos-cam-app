@@ -79,6 +79,11 @@ playbackWindow::~playbackWindow()
 	delete ui;
 }
 
+void playbackWindow::enableSave()
+{
+	ui->cmdSave->setEnabled(true);
+}
+
 void playbackWindow::on_verticalSlider_sliderMoved(int position)
 {
 	camera->playFrame = position;
@@ -112,6 +117,8 @@ void playbackWindow::on_cmdPlayReverse_released()
 void playbackWindow::on_cmdSave_clicked()
 {
 	qDebug()<<"SaveSettings_clicked";
+
+	if(markOutFrame - markInFrame < 10) ui->cmdSave->setEnabled(false);
 
 	UInt32 ret;
 	QMessageBox msg;
@@ -301,6 +308,7 @@ void playbackWindow::updatePlayFrame()
 	{
 		ui->verticalSlider->setValue(playFrame);
 		updateStatusText();
+		qDebug()<<"updatePlayFrame()";
 		lastPlayframe = camera->playFrame;
 	}
 }
@@ -309,7 +317,7 @@ void playbackWindow::updatePlayFrame()
 void playbackWindow::checkForSaveDone()
 {
 	if(camera->recorder->endOfStream())
-	{
+	{//done saving
 		saveDoneTimer->stop();
 		delete saveDoneTimer;
 
@@ -318,14 +326,28 @@ void playbackWindow::checkForSaveDone()
 		setControlEnable(true);
 		updatePlayRateLabel(playbackRate);
 
+		/*
+		qDebug()<<"autoclicking to crash now, just after before cmdsave";
+		on_cmdSave_clicked();
+		qDebug()<<"autoclick done";
+		*/
+
+		qDebug()<<"SaveDone. enabling save button";
+		ui->cmdSave->setEnabled(true);
+
 		if(autoSaveFlag) {
 			close();
 		}
 	}
-	else {
+	else {//not done saving.  Continue to update the label.
 		char tmp[64];
 		sprintf(tmp, "%.1ffps", camera->recorder->getFramerate());
 		ui->lblFrameRate->setText(tmp);
+		qDebug()<<"playFrame: " << camera->playFrame;
+		if(camera->playFrame >= markOutFrame - 10/* || markOutFrame - markInFrame < 10*/){
+			ui->cmdSave->setEnabled(false);
+			qDebug()<<"cmdsave disabled at playframe " << camera->playFrame;
+		}
 	}
 }
 
@@ -377,4 +399,9 @@ void playbackWindow::setControlEnable(bool en)
 void playbackWindow::on_cmdClose_clicked()
 {
     camera->videoHasBeenReviewed = true;
+}
+
+void playbackWindow::on_cmdPlayForward_clicked()
+{
+	ui->cmdSave->setEnabled(true);
 }

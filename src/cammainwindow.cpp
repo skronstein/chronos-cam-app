@@ -225,6 +225,7 @@ void CamMainWindow::on_cmdPlay_clicked()
 	//w->camera = camera;
 	w->setAttribute(Qt::WA_DeleteOnClose);
 	w->show();
+	connect(w, SIGNAL(customContextMenuRequested(QPoint)), w, SLOT(enableSave()));
 	//w->setGeometry(0, 0,w->width(), w->height());
 }
 

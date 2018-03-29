@@ -2687,6 +2687,7 @@ bool Video::setRunning(bool run)
 {
 	if(!running && run)
 	{
+		qDebug()<<"Will now OMX_Init(), startvideo(), and set running to true";
 		OMX_Init ();
 		startVideo ();
 		running = true;
@@ -2694,7 +2695,7 @@ bool Video::setRunning(bool run)
 	}
 	else if(running && !run)
 	{
-
+		qDebug()<<"Will now stopvideo(), OMX_Deinit(), and set running to false";
 		stopVideo ();
 		OMX_Deinit();
 		running = false;

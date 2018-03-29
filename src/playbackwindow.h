@@ -36,6 +36,9 @@ public:
 	explicit playbackWindow(QWidget *parent = 0, Camera * cameraInst = NULL, bool autosave = false);
 	~playbackWindow();
 
+public slots:
+	void enableSave();
+
 private slots:
 	void on_verticalSlider_sliderMoved(int position);
 
@@ -70,6 +73,8 @@ private slots:
 	void on_cmdClose_clicked();
 
 	void enableCloseAndSettings();
+
+	void on_cmdPlayForward_clicked();
 
 private:
 	Ui::playbackWindow *ui;
