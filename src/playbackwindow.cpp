@@ -29,6 +29,10 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include <cstring>
+#include <mntent.h>
+#include <sys/vfs.h>
+
 
 playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosave) :
 	QWidget(parent),
@@ -39,6 +43,7 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 
 	camera = cameraInst;
 	autoSaveFlag = autosave;
+	aborted = false;
 	this->move(camera->ButtonsOnLeft? 0:600, 0);
 
 	sw = new StatusWindow;
@@ -329,6 +334,107 @@ void playbackWindow::checkForSaveDone()
 		ui->cmdSave->setEnabled(true);
 		updatePlayRateLabel(playbackRate);
 		ui->verticalSlider->setHighlightRegion(markInFrame, markOutFrame);
+
+
+		FILE * fp;
+		FILE * mtab = setmntent("/etc/mtab", "r");
+		struct mntent* m;
+		struct mntent mnt;
+		char strings[4096];		//Temp buffer used by mntent
+		char model[256];		//Stores model name of sd* device
+		char vendor[256];		//Stores vendor of sd* device
+		char drive[1024];		//Stores string to be placed in combo box
+		UInt32 len;
+
+		unsigned int driveCount = 0;
+
+		if(1){
+		//if(!aborted && camera->saveToAllDevices){
+			while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
+			{
+				struct statfs fs;
+				if ((mnt.mnt_dir != NULL) && (statfs(mnt.mnt_dir, &fs) == 0))
+				{
+					//Find only drives that are SD card or USB drives
+					if(strstr(mnt.mnt_dir, "/media/mmcblk1") ||
+							strstr(mnt.mnt_dir, "/media/sd"))
+					{
+						driveCount++;
+						if(strstr(mnt.mnt_dir, "/media/sd"))
+						{	//If this is not an SD card (ie a "sd*") type, get the
+							char * mountPoint = mnt.mnt_dir + 7;	//Get the mounted name eg "sda1"
+							Int32 part;
+							char device[10];
+							strncpy(device, mountPoint, 3);		//keep only the "sda" (discard any numbers such as "sda1"
+							device[3] = '\0';					//Add null terminator
+							char modelPath[256];
+							char vendorPath[256];
+
+							//If there's a number following the block name, that's our partition number
+							if(*(mountPoint+3))
+								part = atoi(mountPoint + 3);
+							else
+								part = 1;
+
+							//Produce the paths to read the model and vendor strings
+							sprintf(modelPath, "/sys/block/%s/device/model", device);
+							sprintf(vendorPath, "/sys/block/%s/device/vendor", device);
+
+							//Read the model and vendor strings for this block device
+							fp = fopen(modelPath, "r");
+							if(fp)
+							{
+								len = fread(model, 1, 255, fp);
+								model[len] = '\0';
+								fclose(fp);
+							}
+							else
+								strcpy(model, "???");
+
+							fp = fopen(vendorPath, "r");
+							if(fp)
+							{
+								len = fread(vendor, 1, 255, fp);
+								vendor[len] = '\0';
+								fclose(fp);
+							}
+							else
+								strcpy(vendor, "???");
+
+							//remove all trailing whitespace and carrage returns
+							int i;
+							for(i = strlen(vendor) - 1; ' ' == vendor[i] || '\n' == vendor[i]; i--) {};	//Search back from the end and put a null at the first trailing space
+							vendor[i + 1] = '\0';
+
+							for(i = strlen(model) - 1; ' ' == model[i] || '\n' == model[i]; i--) {};	//Search back from the end and put a null at the first trailing space
+							model[i + 1] = '\0';
+
+							sprintf(drive, "%s (%s %s Partition %d)", mnt.mnt_dir, vendor, model, part);
+						}
+						/*else
+						{
+							Int32 part;
+
+							//If there's a number following the block name, that's our partition number
+							if(*(mnt.mnt_dir + 15))		//Find the first character after "/media/mmcblk1p"
+								part = atoi(mnt.mnt_dir + 15);
+							else
+								part = 1;
+							sprintf(drive, "%s (SD Card Partition %d)", mnt.mnt_dir, part);
+
+						}*/
+
+						unsigned long long int size = fs.f_blocks * fs.f_bsize;
+						unsigned long long int free = fs.f_bfree * fs.f_bsize;
+						unsigned long long int avail = fs.f_bavail * fs.f_bsize;
+						printf("%s %s size=%lld free=%lld avail=%lld\n",
+						mnt.mnt_fsname, mnt.mnt_dir, size, free, avail);
+						qDebug()<<mnt.mnt_dir;
+					}
+				}
+			}
+
+		}
 
 		if(autoSaveFlag) {
 			close();

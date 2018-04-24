@@ -95,6 +95,8 @@ private slots:
 
 	void on_comboDisableUnsavedWarning_currentIndexChanged(int index);
 
+	void on_chkSaveToAllDevices_toggled(bool checked);
+
 private:
 	Ui::UtilWindow *ui;
 	Camera * camera;

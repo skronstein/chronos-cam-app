@@ -61,6 +61,7 @@ Camera::Camera()
 	autoRecord = appSettings.value("camera/autoRecord", 0).toBool();
 	ButtonsOnLeft = getButtonsOnLeft();
 	UpsideDownDisplay = getUpsideDownDisplay();
+	saveToAllDevices = true;
 	strcpy(serialNumber, "Not_Set");
 
 	sem_init(&playMutex, 0, 1);

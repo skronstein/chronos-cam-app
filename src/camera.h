@@ -239,6 +239,7 @@ public:
 	void setFocusAid(bool enable);
 	bool getFocusAid();
 	int blackCalAllStdRes(bool factory = false);
+	bool saveToAllDevices;
 
 	Int32 checkForDeadPixels(int* resultCount = NULL, int* resultMax = NULL);
 
