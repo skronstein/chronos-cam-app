@@ -343,7 +343,6 @@ public:
 	void updateVideoPosition();
 	int getFocusPeakColor();
 	void setFocusPeakColor(int value);
-	void saveToAllDevices();
 private:
 	bool lastRecording;
 	bool terminateRecDataThread;

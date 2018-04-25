@@ -496,7 +496,7 @@ UInt32 VideoRecord::stop()
 	fsync(fd);
 	close(fd);
 
-	qDebug()<<"videoRecord, path_full:" << path_full;
+	//qDebug()<<"videoRecord, path_full:" << path_full;
 }
 
 UInt32 VideoRecord::stop2()

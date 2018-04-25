@@ -3076,20 +3076,11 @@ void recordEosCallback(void * arg)
 	camera->setPlaybackRate(0, true);
 	camera->recorder->stop();
 	if(camera->saveToAllDevicesBool && !(camera->aborted)) {
-
-
-
-
-
-
-		qDebug()<<"saveToAllDevices";
-
 		FILE * fp;
 		FILE * mtab = setmntent("/etc/mtab", "r");
 		struct mntent* m;
 		struct mntent mnt;
 		char strings[4096];		//Temp buffer used by mntent
-		char path_destination[2000];
 		char command[2000];
 		strcpy(command, "");
 
@@ -3102,25 +3093,21 @@ void recordEosCallback(void * arg)
 				if(strstr(mnt.mnt_dir, "/media/mmcblk1") ||
 						strstr(mnt.mnt_dir, "/media/sd"))
 				{
-					qDebug()<<"recordEosCallback, mnt.mnt_dir:" << mnt.mnt_dir;
-					qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;
+					/*qDebug()<<"recordEosCallback, mnt.mnt_dir:" << mnt.mnt_dir;
+					qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;*/
 
 					if(!(strcmp(mnt.mnt_dir, camera->recorder->fileDirectory))) continue; //if the destination directory is the one where the file was originally saved, dont copy the file over itself
-					strcpy(path_destination, mnt.mnt_dir);
-					qDebug()<<"recordEosCallback, path_destination:" << path_destination;
 					strcat(command, "cp ");
-					strcat(command, camera->recorder->path_full);
+					strcat(command, camera->recorder->path_full); //Source file
 					strcat(command, " ");
-					strcat(command, mnt.mnt_dir);
-					qDebug()<<"recordEosCallback, command:" << command;
+					strcat(command, mnt.mnt_dir); //Location to copy to
+					//qDebug()<<"recordEosCallback, command:" << command;
 					int retval = system(command);
-					qDebug()<<"recordEosCallback, retval:" << retval;
+					//qDebug()<<"recordEosCallback, retval:" << retval;
 				}
 			}
 		}
 	}
-
-
 
     camera->setDisplaySettings(false, MAX_LIVE_FRAMERATE);
 	camera->gpmc->write16(DISPLAY_PIPELINE_ADDR, 0x0000); // turn off raw/bipass modes, if they're set
@@ -3137,11 +3124,4 @@ void recordErrorCallback(void * arg, char * message)
 	camera->gpmc->write16(DISPLAY_PIPELINE_ADDR, 0x0000); // turn off raw/bipass modes, if they're set
 	// camera->vinst->setRunning(true);
 	fflush(stdout);
-}
-
-void Camera::saveToAllDevices(){
-
-
-
-
 }
