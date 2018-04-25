@@ -3075,7 +3075,7 @@ void recordEosCallback(void * arg)
 	Camera * camera = (Camera *)arg;
 	camera->setPlaybackRate(0, true);
 	camera->recorder->stop();
-	if(camera->saveToAllDevicesBool) {
+	if(camera->saveToAllDevicesBool && !(camera->aborted)) {
 
 
 

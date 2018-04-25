@@ -139,6 +139,8 @@ void playbackWindow::on_cmdSave_clicked()
 			return;
 		}
 
+		camera->aborted = false;
+
 		if (!statvfs(camera->recorder->fileDirectory, &statvfsBuf)) {
 			qDebug("===================================");
 			// calculated estimated size
@@ -252,6 +254,7 @@ void playbackWindow::on_cmdSave_clicked()
 		camera->recorder->stop2();
 		ui->verticalSlider->removeLastRegionFromList();
 		ui->verticalSlider->setHighlightRegion(markInFrame, markOutFrame);
+		camera->aborted = true;
 	}
 
 }
