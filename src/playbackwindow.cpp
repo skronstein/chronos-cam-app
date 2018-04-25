@@ -43,7 +43,7 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 
 	camera = cameraInst;
 	autoSaveFlag = autosave;
-	aborted = false;
+	camera->aborted = false;
 	this->move(camera->ButtonsOnLeft? 0:600, 0);
 
 	sw = new StatusWindow;
@@ -348,7 +348,7 @@ void playbackWindow::checkForSaveDone()
 
 		unsigned int driveCount = 0;
 
-		if(1){
+		if(0){
 		//if(!aborted && camera->saveToAllDevices){
 			while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
 			{

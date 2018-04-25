@@ -106,7 +106,7 @@ UtilWindow::UtilWindow(QWidget *parent, Camera * cameraInst) :
 	ui->chkAutoRecord->setChecked(camera->get_autoRecord());
 	ui->chkUiOnLeft->setChecked(camera->getButtonsOnLeft());
 	ui->comboDisableUnsavedWarning->setCurrentIndex(camera->getUnsavedWarnEnable());
-	ui->chkSaveToAllDevices->setChecked(camera->saveToAllDevices);
+	ui->chkSaveToAllDevices->setChecked(camera->saveToAllDevicesBool);
 
 	if(camera->RotationArgumentIsSet())
 		ui->chkUpsideDownDisplay->setChecked(camera->getUpsideDownDisplay());
@@ -950,5 +950,5 @@ void UtilWindow::on_comboDisableUnsavedWarning_currentIndexChanged(int index)
 
 void UtilWindow::on_chkSaveToAllDevices_toggled(bool checked)
 {
-    camera->saveToAllDevices = checked;
+    camera->saveToAllDevicesBool = checked;
 }

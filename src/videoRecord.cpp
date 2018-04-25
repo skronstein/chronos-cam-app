@@ -450,6 +450,8 @@ Int32 VideoRecord::start(UInt32 hSize, UInt32 vSize, UInt32 frames, save_mode_ty
 	running = true;
 	frameCount = 0;
 
+	strcpy(path_full, path);
+
 	printf("VideoRecord start done\n");
 	return SUCCESS;
 }
@@ -493,6 +495,8 @@ UInt32 VideoRecord::stop()
 	g_print ("Closing output file\n");
 	fsync(fd);
 	close(fd);
+
+	qDebug()<<"videoRecord, path_full:" << path_full;
 }
 
 UInt32 VideoRecord::stop2()

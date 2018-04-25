@@ -239,7 +239,8 @@ public:
 	void setFocusAid(bool enable);
 	bool getFocusAid();
 	int blackCalAllStdRes(bool factory = false);
-	bool saveToAllDevices;
+	bool saveToAllDevicesBool = 1;
+	bool aborted = 0;
 
 	Int32 checkForDeadPixels(int* resultCount = NULL, int* resultMax = NULL);
 
@@ -342,6 +343,7 @@ public:
 	void updateVideoPosition();
 	int getFocusPeakColor();
 	void setFocusPeakColor(int value);
+	void saveToAllDevices();
 private:
 	bool lastRecording;
 	bool terminateRecDataThread;

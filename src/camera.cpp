@@ -35,6 +35,11 @@
 #include "defines.h"
 #include <QWSDisplay>
 
+#include <cstring>
+#include <mntent.h>
+#include <sys/vfs.h>
+
+
 void* recDataThread(void *arg);
 void frameCallback(void * arg);
 void recordEosCallback(void * arg);
@@ -61,7 +66,7 @@ Camera::Camera()
 	autoRecord = appSettings.value("camera/autoRecord", 0).toBool();
 	ButtonsOnLeft = getButtonsOnLeft();
 	UpsideDownDisplay = getUpsideDownDisplay();
-	saveToAllDevices = true;
+	saveToAllDevicesBool = true;
 	strcpy(serialNumber, "Not_Set");
 
 	sem_init(&playMutex, 0, 1);
@@ -3070,6 +3075,53 @@ void recordEosCallback(void * arg)
 	Camera * camera = (Camera *)arg;
 	camera->setPlaybackRate(0, true);
 	camera->recorder->stop();
+	if(camera->saveToAllDevicesBool) {
+
+
+
+
+
+
+		qDebug()<<"saveToAllDevices";
+
+		FILE * fp;
+		FILE * mtab = setmntent("/etc/mtab", "r");
+		struct mntent* m;
+		struct mntent mnt;
+		char strings[4096];		//Temp buffer used by mntent
+		char path_destination[2000];
+		char command[2000];
+		strcpy(command, "");
+
+		while ((m = getmntent_r(mtab, &mnt, strings, sizeof(strings))))
+		{
+			struct statfs fs;
+			if ((mnt.mnt_dir != NULL) && (statfs(mnt.mnt_dir, &fs) == 0))
+			{
+				//Find only drives that are SD card or USB drives
+				if(strstr(mnt.mnt_dir, "/media/mmcblk1") ||
+						strstr(mnt.mnt_dir, "/media/sd"))
+				{
+					qDebug()<<"recordEosCallback, mnt.mnt_dir:" << mnt.mnt_dir;
+					qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;
+
+					if(!(strcmp(mnt.mnt_dir, camera->recorder->fileDirectory))) continue; //if the destination directory is the one where the file was originally saved, dont copy the file over itself
+					strcpy(path_destination, mnt.mnt_dir);
+					qDebug()<<"recordEosCallback, path_destination:" << path_destination;
+					strcat(command, "cp ");
+					strcat(command, camera->recorder->path_full);
+					strcat(command, " ");
+					strcat(command, mnt.mnt_dir);
+					qDebug()<<"recordEosCallback, command:" << command;
+					int retval = system(command);
+					qDebug()<<"recordEosCallback, retval:" << retval;
+				}
+			}
+		}
+	}
+
+
+
     camera->setDisplaySettings(false, MAX_LIVE_FRAMERATE);
 	camera->gpmc->write16(DISPLAY_PIPELINE_ADDR, 0x0000); // turn off raw/bipass modes, if they're set
 	camera->vinst->setRunning(true);
@@ -3087,3 +3139,9 @@ void recordErrorCallback(void * arg, char * message)
 	fflush(stdout);
 }
 
+void Camera::saveToAllDevices(){
+
+
+
+
+}

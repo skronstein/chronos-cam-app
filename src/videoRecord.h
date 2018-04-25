@@ -187,6 +187,7 @@ public:
 	UInt32 framerate;
 	char filename[1000];
 	char fileDirectory[1000];
+	char path_full[1000];
 
 private:
 	bool running;
