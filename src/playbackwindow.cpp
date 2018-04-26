@@ -29,10 +29,6 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include <cstring>
-#include <mntent.h>
-#include <sys/vfs.h>
-
 
 playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosave) :
 	QWidget(parent),
