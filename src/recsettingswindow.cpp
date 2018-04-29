@@ -275,6 +275,8 @@ void RecSettingsWindow::on_spinHRes_editingFinished()
 	ui->frameImage->setGeometry(QRect(ui->spinHOffset->value()/4, ui->spinVOffset->value()/4, ui->spinHRes->value()/4, ui->spinVRes->value()/4));
 	qDebug() << "editing finished ";
 	updateInfoText();
+	qDebug() << "recLenFrames" << camera->getImagerSettings().recRegionSizeFrames;
+	qDebug() << "ratio: " << (unsigned int)camera->maxPostFramesRatio;
 }
 
 void RecSettingsWindow::on_spinVRes_valueChanged(int arg1)
@@ -285,7 +287,7 @@ void RecSettingsWindow::on_spinVRes_valueChanged(int arg1)
         ui->frameImage->setGeometry(QRect(ui->spinHOffset->value()/4, ui->spinVOffset->value()/4, ui->spinHRes->value()/4, ui->spinVRes->value()/4));
         updateInfoText();
         is->recRegionSizeFrames = camera->getMaxRecordRegionSizeFrames(ui->spinHRes->value(), ui->spinVRes->value());
-        qDebug() << "---- Rec Settings Window ---- hres =" << ui->spinHRes->value() << "vres =" << ui->spinVRes->value() << "recRegionSizeFrames =" << is->recRegionSizeFrames;
+	qDebug() << "---- Rec Settings Window ---- hres =" << ui->spinHRes->value() << "vres =" << ui->spinVRes->value() << "ratio=" << (unsigned int)camera->maxPostFramesRatio;
     }
 }
 

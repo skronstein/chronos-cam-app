@@ -2,6 +2,7 @@
 #include "ui_triggerdelaywindow.h"
 #include "camera.h"
 #include <QDebug>
+#include <QMessageBox>
 triggerDelayWindow::triggerDelayWindow(QWidget *parent, Camera * cameraInst, ImagerSettings_t * imagerSettings, double periodFromRecSettingsWindow) :
     QWidget(parent),
     ui(new Ui::triggerDelayWindow)
@@ -42,12 +43,17 @@ triggerDelayWindow::~triggerDelayWindow()
 
 void triggerDelayWindow::on_cmdOK_clicked()
 {
+	qDebug()<<"triggerDelayWindow::on_cmdOK_clicked";
     camera->setTriggerDelayConstant(ui->comboKeepConstant->currentIndex());
     camera->setTriggerDelayValues((double)ui->spinPostFrames->value() / recLenFrames,
                                   ui->spinPostSeconds->value(),
 						    ui->spinPostFrames->value());
     camera->io->setTriggerDelayFrames(ui->spinPostFrames->value());
-    camera->maxPostFramesRatio = ui->horizontalSlider->maximum() / (double)max(recLenFrames, ui->horizontalSlider->value());
+    camera->maxPostFramesRatio = ui->horizontalSlider->maximum() / (double)std::max(recLenFrames, (unsigned int)ui->horizontalSlider->value());
+    QMessageBox msg;
+    msg.exec();
+    qDebug()<<"recLenFrames" << recLenFrames;
+    qDebug()<<"slider: " <<(unsigned int)ui->horizontalSlider->value();
     close();
 }
 

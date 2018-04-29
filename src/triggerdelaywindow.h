@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "camera.h"
+#include <QDebug>
 
 namespace Ui {
 class triggerDelayWindow;
