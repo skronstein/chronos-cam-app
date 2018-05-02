@@ -3065,7 +3065,10 @@ void recordEosCallback(void * arg)
 	Camera * camera = (Camera *)arg;
 	camera->setPlaybackRate(0, true);
 	camera->recorder->stop();
+	qDebug()<<"recordeoscallback";
+	int drives = 0;
 	if(camera->saveToAllDevicesBool && !(camera->aborted)) {
+		qDebug()<<"will try to save to all devices";
 		FILE * fp;
 		FILE * mtab = setmntent("/etc/mtab", "r");
 		struct mntent* m;
@@ -3083,8 +3086,8 @@ void recordEosCallback(void * arg)
 				if(strstr(mnt.mnt_dir, "/media/mmcblk1") ||
 						strstr(mnt.mnt_dir, "/media/sd"))
 				{
-					/*qDebug()<<"recordEosCallback, mnt.mnt_dir:" << mnt.mnt_dir;
-					qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;*/
+					qDebug()<<"recordEosCallback, mnt.mnt_dir:" << mnt.mnt_dir << ", drive " <<++drives;;
+					/*qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;*/
 
 					if(!(strcmp(mnt.mnt_dir, camera->recorder->fileDirectory))) continue; //if the destination directory is the one where the file was originally saved, dont copy the file over itself
 					sprintf(command, "cp %s %s", camera->recorder->path_full, mnt.mnt_dir);
