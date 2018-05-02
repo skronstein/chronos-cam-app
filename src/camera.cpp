@@ -3090,7 +3090,7 @@ void recordEosCallback(void * arg)
 					/*qDebug()<<"recordEosCallback, camera->recorder->fileDirectory:" << camera->recorder->fileDirectory;*/
 
 					if(!(strcmp(mnt.mnt_dir, camera->recorder->fileDirectory))) continue; //if the destination directory is the one where the file was originally saved, dont copy the file over itself
-					sprintf(command, "cp %s %s", camera->recorder->path_full, mnt.mnt_dir);
+					sprintf(command, "cp \"%s\" \"%s\"", camera->recorder->path_full, mnt.mnt_dir);
 					//qDebug()<<"recordEosCallback, command:" << command;
 					int retval = system(command);
 					//qDebug()<<"recordEosCallback, retval:" << retval;
