@@ -43,6 +43,8 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	QWidget(parent),
 	ui(new Ui::saveSettingsWindow)
 {
+	windowInitComplete = false;
+
 	QSettings settings;
 	ui->setupUi(this);
 	this->setWindowFlags(Qt::Dialog /*| Qt::WindowStaysOnTopHint*/ | Qt::FramelessWindowHint);
@@ -61,6 +63,7 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	if ( index != -1 ) { // -1 for not found
 		ui->comboDrive->setCurrentIndex(index);
 	}
+	saveFileDirectory();
 
 	ui->comboProfile->clear();
 	ui->comboProfile->addItem("Base");
@@ -98,6 +101,7 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	while (val >>= 1) ++index;
 	ui->comboLevel->setCurrentIndex(index);
 
+	ui->comboSaveFormat->setEnabled(false);
 	ui->comboSaveFormat->clear();
 	// these must line up with the enum in videoRecord.h
 	ui->comboSaveFormat->addItem("H.264");            // SAVE_MODE_H264
@@ -106,12 +110,27 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	ui->comboSaveFormat->addItem("Raw 12bit packed"); // SAVE_MODE_RAW12
 	
 	ui->comboSaveFormat->setCurrentIndex(settings.value("recorder/saveFormat", 0).toUInt());
-	
+
+	ui->comboSaveFormat->setEnabled(true);
+
+	if(ui->comboSaveFormat->currentIndex() == 0) {
+		ui->spinBitrate->setEnabled(true);
+		ui->spinFramerate->setEnabled(true);
+		ui->spinMaxBitrate->setEnabled(true);
+	}
+	else {
+		ui->spinBitrate->setEnabled(false);
+		ui->spinFramerate->setEnabled(false);
+		ui->spinMaxBitrate->setEnabled(false);
+	}
+
 	driveCount = 0;
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateDrives()));
 	timer->start(1000);
 
+	windowInitComplete = true;
+	updateBitrate();
 }
 
 saveSettingsWindow::~saveSettingsWindow()
@@ -125,8 +144,8 @@ void saveSettingsWindow::on_cmdClose_clicked()
 {
 	QSettings settings;
 
-	camera->recorder->profile = 1 << ui->comboProfile->currentIndex();
-	camera->recorder->level = 1 << ui->comboLevel->currentIndex();
+	camera->recorder->profile = 1 << 3;
+	camera->recorder->level = 1 << 15;
 
 	saveFileDirectory();
 
@@ -297,6 +316,7 @@ void saveSettingsWindow::on_cmdRefresh_clicked()
 
 void saveSettingsWindow::updateBitrate()
 {
+	if(!windowInitComplete) return;
 	int saveFormat = ui->comboSaveFormat->currentIndex();
 	UInt32 frameRate = ui->spinFramerate->value();
 	double bitsPerPixel;
@@ -391,7 +411,7 @@ void saveSettingsWindow::on_spinMaxBitrate_valueChanged(int arg1)
 
 void saveSettingsWindow::on_comboSaveFormat_currentIndexChanged(int index)
 {
-	
+	if(!ui->comboSaveFormat->isEnabled()) return;
 	if(index == 0) {
 		ui->spinBitrate->setEnabled(true);
 		ui->spinFramerate->setEnabled(true);
@@ -408,9 +428,11 @@ void saveSettingsWindow::on_comboSaveFormat_currentIndexChanged(int index)
 }
 
 void saveSettingsWindow::setControlEnable(bool en){
-	ui->spinBitrate->setEnabled(en);
-	ui->spinFramerate->setEnabled(en);
-	ui->spinMaxBitrate->setEnabled(en);
+	//Only re-enable these 3 spinboxes if the save mode is not raw
+	bool H264SettingsEnabled = (en && (ui->comboSaveFormat->currentIndex() == SAVE_MODE_H264));
+	ui->spinBitrate->setEnabled(H264SettingsEnabled);
+	ui->spinFramerate->setEnabled(H264SettingsEnabled);
+	ui->spinMaxBitrate->setEnabled(H264SettingsEnabled);
 	ui->lineFilename->setEnabled(en);
 	ui->comboSaveFormat->setEnabled(en);
 	ui->comboDrive->setEnabled(en);
