@@ -346,6 +346,7 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * senso
 		sceneWhiteBalMatrix[1] = 1.0;
 		sceneWhiteBalMatrix[2] = 1.51712;
 	}
+	pseudoinverse(colorCalMatrix, colorCalMatrixInverse, 3);
 
 	qDebug() << gpmc->read16(CCM_11_ADDR) << gpmc->read16(CCM_12_ADDR) << gpmc->read16(CCM_13_ADDR);
 	qDebug() << gpmc->read16(CCM_21_ADDR) << gpmc->read16(CCM_22_ADDR) << gpmc->read16(CCM_23_ADDR);
@@ -2604,9 +2605,9 @@ Int32 Camera::setWhiteBalance(UInt32 x, UInt32 y)
 	double r =  rRaw-
 				readPixel12(quadStartY * imagerSettings.stride + quadStartX + 1, FPN_ADDRESS * BYTES_PER_WORD);
 
-	r *= cameraWhiteBalMatrix[0];
-	g *= cameraWhiteBalMatrix[1];
-	b *= cameraWhiteBalMatrix[2];
+	r *= 1;//cameraWhiteBalMatrix[0];
+	g *= 0.955;//cameraWhiteBalMatrix[1];
+	b *= 0.873;//cameraWhiteBalMatrix[2];
 
     qDebug() << "RGB values read:" << r << g << b;
 
@@ -2630,6 +2631,35 @@ Int32 Camera::setWhiteBalance(UInt32 x, UInt32 y)
 	setCCMatrix();
 	return SUCCESS;
 
+}
+
+void pseudoinverse (double (*in)[3], double (*out)[3], int size)
+{
+  double work[3][6], num;
+  int i, j, k;
+
+  for (i=0; i < 3; i++) {
+    for (j=0; j < 6; j++)
+      work[i][j] = j == i+3;
+    for (j=0; j < 3; j++)
+      for (k=0; k < size; k++)
+	work[i][j] += in[k][i] * in[k][j];
+  }
+  for (i=0; i < 3; i++) {
+    num = work[i][i];
+    for (j=0; j < 6; j++)
+      work[i][j] /= num;
+    for (k=0; k < 3; k++) {
+      if (k==i) continue;
+      num = work[k][i];
+      for (j=0; j < 6; j++)
+	work[k][j] -= work[i][j] * num;
+    }
+  }
+  for (i=0; i < size; i++)
+    for (j=0; j < 3; j++)
+      for (out[i][j]=k=0; k < 3; k++)
+	out[i][j] += work[j][k+3] * in[i][k];
 }
 
 void Camera::setFocusAid(bool enable)
