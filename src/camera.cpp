@@ -343,9 +343,7 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * senso
 	}
 	else{
 		WBIndex = getWBIndex();
-		sceneWhiteBalMatrix[0] = preComputedWhiteBalMatrix[WBIndex][0];
-		sceneWhiteBalMatrix[1] = preComputedWhiteBalMatrix[WBIndex][1];
-		sceneWhiteBalMatrix[2] = preComputedWhiteBalMatrix[WBIndex][2];
+		setSceneWhiteBalMatrix();
 	}
 
 	qDebug() << gpmc->read16(CCM_11_ADDR) << gpmc->read16(CCM_12_ADDR) << gpmc->read16(CCM_13_ADDR);
@@ -2644,6 +2642,18 @@ void Camera::setWBIndex(UInt8 index){
 	appsettings.setValue("camera/WBIndex", index);
 }
 
+void Camera::setSceneWhiteBalMatrix(){
+	sceneWhiteBalMatrix[0] = preComputedWhiteBalMatrix[WBIndex][0];
+	sceneWhiteBalMatrix[1] = preComputedWhiteBalMatrix[WBIndex][1];
+	sceneWhiteBalMatrix[2] = preComputedWhiteBalMatrix[WBIndex][2];
+	qDebug() << "Setting WB matrix to " << sceneWhiteBalMatrix[0] << sceneWhiteBalMatrix[1] << sceneWhiteBalMatrix[2];
+}
+
+void Camera::setCustomWhiteBal(){
+	preComputedWhiteBalMatrix[0][0] = sceneWhiteBalMatrix[0];
+	preComputedWhiteBalMatrix[0][1] = sceneWhiteBalMatrix[1];
+	preComputedWhiteBalMatrix[0][2] = sceneWhiteBalMatrix[2];
+}
 
 void Camera::setFocusAid(bool enable)
 {

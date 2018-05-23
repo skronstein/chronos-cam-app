@@ -349,6 +349,7 @@ private:
 public:
 	UInt8 getWBIndex();
 	void  setWBIndex(UInt8 index);
+	void setSceneWhiteBalMatrix();
 	int unsavedWarnEnabled;
 	bool videoHasBeenReviewed;
 	bool autoSave;
@@ -367,6 +368,7 @@ public:
 	void updateVideoPosition();
 	int getFocusPeakColor();
 	void setFocusPeakColor(int value);
+	void setCustomWhiteBal();
 private:
 	bool lastRecording;
 	bool terminateRecDataThread;

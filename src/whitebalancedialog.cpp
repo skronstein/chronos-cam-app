@@ -27,6 +27,8 @@ void whiteBalanceDialog::on_comboWB_currentIndexChanged(int index)
 {
 	if(!windowInitComplete) return;
 	camera->setWBIndex(index);
+	camera->setSceneWhiteBalMatrix();
+	camera->setCCMatrix();
 }
 
 void whiteBalanceDialog::on_cmdSetCustomWB_clicked()
@@ -53,4 +55,5 @@ void whiteBalanceDialog::on_cmdSetCustomWB_clicked()
 		return;
 	}
 	ui->comboWB->setCurrentIndex(0);
+	camera->setCustomWhiteBal();
 }
