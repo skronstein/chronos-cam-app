@@ -7,7 +7,7 @@ whiteBalanceDialog::whiteBalanceDialog(QWidget *parent, Camera * cameraInst) :
 	QDialog(parent),
 	ui(new Ui::whiteBalanceDialog)
 {
-	windowInitComplete = false;
+	autoSetColorStuff = false;
 	ui->setupUi(this);
 	camera = cameraInst;
 	this->setWindowFlags(Qt::Dialog /*| Qt::WindowStaysOnTopHint*/ | Qt::FramelessWindowHint);
@@ -15,7 +15,7 @@ whiteBalanceDialog::whiteBalanceDialog(QWidget *parent, Camera * cameraInst) :
 	connect(ui->cmdClose, SIGNAL(clicked(bool)), this, SLOT(close()));
 	sw = new StatusWindow;
 	ui->comboWB->setCurrentIndex(camera->getWBIndex());
-	windowInitComplete = true;
+	autoSetColorStuff = true;
 }
 
 whiteBalanceDialog::~whiteBalanceDialog()
@@ -25,7 +25,7 @@ whiteBalanceDialog::~whiteBalanceDialog()
 
 void whiteBalanceDialog::on_comboWB_currentIndexChanged(int index)
 {
-	if(!windowInitComplete) return;
+	if(!autoSetColorStuff) return;
 	camera->setWBIndex(index);
 	camera->setSceneWhiteBalMatrix();
 	camera->setCCMatrix();
@@ -54,6 +54,15 @@ void whiteBalanceDialog::on_cmdSetCustomWB_clicked()
 		sw->show();
 		return;
 	}
+	autoSetColorStuff = false;
 	ui->comboWB->setCurrentIndex(0);
+	autoSetColorStuff = true;
 	camera->setCustomWhiteBal();
+	QString str;
+	str.append(QString::number(camera->sceneWhiteBalMatrix[0]));
+	str.append(", ");
+	str.append(QString::number(camera->sceneWhiteBalMatrix[1]));
+	str.append(", ");
+	str.append(QString::number(camera->sceneWhiteBalMatrix[2]));
+	ui->label->setText(str);
 }

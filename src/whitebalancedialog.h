@@ -25,7 +25,7 @@ private slots:
 private:
 	Ui::whiteBalanceDialog *ui;
 	Camera * camera;
-	bool windowInitComplete;
+	bool autoSetColorStuff;
 	StatusWindow * sw;
 };
 
