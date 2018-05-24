@@ -35,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>125</y>
      <width>180</width>
      <height>130</height>
     </rect>
@@ -54,7 +54,7 @@ White Balance</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>55</y>
+     <y>70</y>
      <width>180</width>
      <height>41</height>
     </rect>
@@ -104,12 +104,12 @@ White Balance</string>
      <x>10</x>
      <y>10</y>
      <width>141</width>
-     <height>41</height>
+     <height>56</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>11</pointsize>
+     <pointsize>15</pointsize>
     </font>
    </property>
    <property name="text">
@@ -121,7 +121,7 @@ Selected:</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>250</y>
+     <y>265</y>
      <width>180</width>
      <height>130</height>
     </rect>

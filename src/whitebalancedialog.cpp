@@ -68,10 +68,11 @@ void whiteBalanceDialog::on_cmdSetCustomWB_clicked()
 	autoSetColorStuff = true;
 	camera->setCustomWhiteBal();
 	QString str;
+	str.append("R = ");
 	str.append(QString::number(Rsum/(double)itr));
-	str.append(", ");
+	str.append("\nG = ");
 	str.append(QString::number(Gsum/(double)itr));
-	str.append(", ");
+	str.append("\nB = ");
 	str.append(QString::number(Bsum/(double)itr));
 	ui->label->setText(str);
 }
@@ -111,10 +112,11 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 	ui->comboWB->setCurrentIndex(0);
 	autoSetColorStuff = true;
 	QString str;
+	str.append("R = ");
 	str.append(QString::number(Rsum/(double)itr));
-	str.append(", ");
+	str.append("\nG = ");
 	str.append(QString::number(Gsum/(double)itr));
-	str.append(", ");
+	str.append("\nB = ");
 	str.append(QString::number(Bsum/(double)itr));
 	ui->label->setText(str);
 	camera->sceneWhiteBalMatrix[0] = Rsum/(double)itr;
