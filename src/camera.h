@@ -333,11 +333,11 @@ private:
 	UInt8  WBIndex;
 	double preComputedWhiteBalMatrix[6][3] = {//[6][3] instead of [5][3] to allow extra space for custom white balance
 										 {1.25, 1.0, 1.50},//manual white balance set by user
-										 {1.0, 1.0, 1.0},
-										 {1.0, 1.0, 1.0},
-										 {1.0, 1.0, 1.0},
-										 {1.0, 1.0, 1.0},
-										 {1.21266, 1.0, 1.51712}//domestic lighting
+										 {1.43, 1.0, 1.4},//cloudy/shade (8000k)
+										 {1.38, 1.0, 1.58},//noon
+										 {1.25, 1.0, 1.725}, //Flash
+										 {1.0, 1.05, 2.5}, //domestic lighting (2850k)
+										 {1.21266, 1.0, 1.51712}//domestic lighting (office)
 									 };//Pre-computed white balance options
 	double imgGain;
 	bool focusPeakEnabled;

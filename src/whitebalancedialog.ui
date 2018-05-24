@@ -109,12 +109,32 @@ White Balance</string>
    </property>
    <property name="font">
     <font>
-     <pointsize>15</pointsize>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="text">
     <string>Current WB
 Selected:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cmdSetCustomWB_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>250</y>
+     <width>180</width>
+     <height>130</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Set Custom
+White Balance
+(Multiple)</string>
    </property>
   </widget>
  </widget>
