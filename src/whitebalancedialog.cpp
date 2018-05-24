@@ -87,10 +87,11 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 	reply = QMessageBox::question(this, "Set white balance?", "Will set white balance. Continue?", QMessageBox::Yes|QMessageBox::No);
 	if(QMessageBox::Yes != reply)
 		return;
-
+	QString str1;
 	double Rsum = 0, Gsum = 0, Bsum = 0;
-	int itr;
-	for(itr = 0; itr < 200; itr++){
+	int itr, iterations;
+	iterations = 200;
+	for(itr = 0; itr < iterations; itr++){
 		Int32 ret = camera->setWhiteBalance(camera->getImagerSettings().hRes / 2 & 0xFFFFFFFE,
 									 camera->getImagerSettings().vRes / 2 & 0xFFFFFFFE);	//Sample from middle but make sure position is a multiple of 2
 		if(ret == CAMERA_CLIPPED_ERROR)
@@ -110,6 +111,8 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 		Rsum += RED;
 		Gsum += GREEN;
 		Bsum += BLUE;
+		str1.setNum(itr);
+		ui->label->setText(str1);
 		delayms(17);
 	}
 	autoSetColorStuff = false;
