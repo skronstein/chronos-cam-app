@@ -147,7 +147,7 @@ typedef struct {
 
 	struct {
 		unsigned temporary : 1; // set this to disable saving of state
-        unsigned disableRingBuffer : 1; //Set this to disable the ring buffer (record ends when at the end of memory rather than rolling over to the beginning)
+	   unsigned disableRingBuffer : 1; //Set this to disable the ring buffer (record ends when at the end of memory rather than rolling over to the beginning)
 	};
 } ImagerSettings_t;
 
@@ -332,12 +332,12 @@ private:
 	double cameraWhiteBalMatrix[3] = { 1.15177, 1.09279, 1.0 };
 	UInt8  WBIndex;
 	double preComputedWhiteBalMatrix[6][3] = {//[6][3] instead of [5][3] to allow extra space for custom white balance
-										 {1.25, 1.0, 1.50},//manual white balance set by user
-										 {1.43, 1.0, 1.4},//cloudy/shade (8000k)
-										 {1.38, 1.0, 1.58},//noon
-										 {1.25, 1.0, 1.725}, //Flash
-										 {1.0, 1.05, 2.5}, //domestic lighting (2850k)
-										 {1.21266, 1.0, 1.51712}//domestic lighting (office)
+										 {1.00, 1.00, 1.00},// manual white balance set by user
+										 {1.43, 1.00, 1.40},// 8000k - Cloudy Sky
+										 {1.38, 1.00, 1.58},// 6500k - Noon Sunlight
+										 {1.25, 1.0, 1.725},// 5250k - Electronic Flash
+										 {1.20, 1.00, 1.82},// 4500k - Flourescent
+										 {1.00, 1.05, 2.50},// 2750k - Domestic Lighting
 									 };//Pre-computed white balance options
 	double imgGain;
 	bool focusPeakEnabled;
