@@ -4,6 +4,10 @@
 #include <QSettings>
 #include "util.h"
 
+#define RED camera->sceneWhiteBalMatrix[0]
+#define GREEN camera->sceneWhiteBalMatrix[1]
+#define BLUE camera->sceneWhiteBalMatrix[2]
+
 whiteBalanceDialog::whiteBalanceDialog(QWidget *parent, Camera * cameraInst) :
 	QDialog(parent),
 	ui(new Ui::whiteBalanceDialog)
@@ -103,9 +107,9 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 			sw->show();
 			return;
 		}
-		Rsum += camera->sceneWhiteBalMatrix[0];
-		Gsum += camera->sceneWhiteBalMatrix[1];
-		Bsum += camera->sceneWhiteBalMatrix[2];
+		Rsum += RED;
+		Gsum += GREEN;
+		Bsum += BLUE;
 		delayms(17);
 	}
 	autoSetColorStuff = false;
@@ -119,8 +123,8 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 	str.append("\nB = ");
 	str.append(QString::number(Bsum/(double)itr));
 	ui->label->setText(str);
-	camera->sceneWhiteBalMatrix[0] = Rsum/(double)itr;
-	camera->sceneWhiteBalMatrix[1] = Gsum/(double)itr;
-	camera->sceneWhiteBalMatrix[2] = Bsum/(double)itr;
+	RED = Rsum/(double)itr;
+	GREEN = Gsum/(double)itr;
+	BLUE = Bsum/(double)itr;
 	camera->setCustomWhiteBal();
 }
