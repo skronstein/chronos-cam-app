@@ -62,9 +62,9 @@ void whiteBalanceDialog::on_cmdSetCustomWB_clicked()
 			sw->show();
 			return;
 		}
-		Rsum += camera->sceneWhiteBalMatrix[0];
-		Gsum += camera->sceneWhiteBalMatrix[1];
-		Bsum += camera->sceneWhiteBalMatrix[2];
+		Rsum += RED;
+		Gsum += GREEN;
+		Bsum += BLUE;
 		delayms(17);
 	}
 	autoSetColorStuff = false;
@@ -115,16 +115,19 @@ void whiteBalanceDialog::on_cmdSetCustomWB_2_clicked()
 	autoSetColorStuff = false;
 	ui->comboWB->setCurrentIndex(0);
 	autoSetColorStuff = true;
+
+	double dimmestColor = min(RED, GREEN);
+	dimmestColor = min(dimmestColor, BLUE);
+	RED /= dimmestColor;
+	GREEN /= dimmestColor;
+	BLUE /= dimmestColor;
 	QString str;
 	str.append("R = ");
-	str.append(QString::number(Rsum/(double)itr));
+	str.append(QString::number(RED));
 	str.append("\nG = ");
-	str.append(QString::number(Gsum/(double)itr));
+	str.append(QString::number(GREEN));
 	str.append("\nB = ");
-	str.append(QString::number(Bsum/(double)itr));
+	str.append(QString::number(BLUE));
 	ui->label->setText(str);
-	RED = Rsum/(double)itr;
-	GREEN = Gsum/(double)itr;
-	BLUE = Bsum/(double)itr;
 	camera->setCustomWhiteBal();
 }
