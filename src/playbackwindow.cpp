@@ -78,6 +78,7 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 
 playbackWindow::~playbackWindow()
 {
+	qDebug()<<"deconstructor";
 	camera->setPlayMode(false);
 	timer->stop();
 	emit finishedSaving();
@@ -195,7 +196,7 @@ void playbackWindow::on_cmdSave_clicked()
 			qDebug()<<"insufficientFreeSpaceEstimate = " <<insufficientFreeSpaceEstimate;*/
 			
 			if(!autoSaveFlag){
-				if (fileOverMaxSize && !insufficientFreeSpaceEstimate) {//If file size is over 4GB and file system is FAT32
+				if (fileOverMaxSize && !insufficientFreeSpaceEstimate) {
 					QMessageBox::StandardButton reply;
 					reply = QMessageBox::warning(this, "Warning - File size over limit", "Estimated file size is larger than the 4GB limit for the the filesystem.\nAttempt to save anyway?", QMessageBox::Yes|QMessageBox::No);
 					if(QMessageBox::Yes != reply)
@@ -377,8 +378,9 @@ void playbackWindow::checkForSaveDone()
 		updatePlayRateLabel(playbackRate);
 		ui->verticalSlider->setHighlightRegion(markInFrame, markOutFrame);
 
-		if(autoSaveFlag) {
-			close();
+		if(camera->get_autoRecord()) {
+			qDebug()<<".  closing";
+			delete this;
 		}
 	}
 	else {

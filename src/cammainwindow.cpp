@@ -364,7 +364,7 @@ void CamMainWindow::updateRecordingState(bool recording)
 		if(camera->get_autoSave() && autoSaveActive)
 		{
 			playbackWindow *w = new playbackWindow(NULL, camera, true);
-			connect(w, SIGNAL(finishedSaving()),this, SLOT(playFinishedSaving()));
+			if(camera->get_autoRecord()) connect(w, SIGNAL(finishedSaving()),this, SLOT(playFinishedSaving()));
 			//w->camera = camera;
 			w->setAttribute(Qt::WA_DeleteOnClose);
 			w->show();
