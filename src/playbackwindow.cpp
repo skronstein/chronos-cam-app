@@ -452,6 +452,20 @@ void playbackWindow::checkForSaveDone()
 			on_cmdSave_clicked();
 			sw->setText("Storage is now full; Aborting...");			
 		}
+		
+		/*Abort the save if within 20MB of FAT32 file size limit,
+		but not if the save has already been aborted,
+		or if the save button is not enabled(unsafe to abort at that time)(except if save mode is RAW)*/
+		bool closeToFAT32Limit = (getFileSize(camera->vinst->filename) > 4294967296-20000000);
+		if(closeToFAT32Limit &&
+		   !saveAborted &&
+				(ui->cmdSave->isEnabled() ||
+				getSaveFormat() != SAVE_MODE_H264)
+		   ) {
+			on_cmdSave_clicked();
+			sw->setText("Storage is now full; Aborting...");			
+		}
+		
 	}
 }
 
@@ -516,4 +530,11 @@ void playbackWindow::on_cmdLoop_clicked()
 	unsigned int count = (markOutFrame - markInFrame + 1);
 	camera->vinst->loopPlayback(markInFrame, count, fps);
 }
-
+/*
+UInt64 playbackWindow::getFilesize(const char* filename) {
+	struct stat st;
+	if(stat(filename, &st) != 0) {
+	    return 0;
+	}
+	return st.st_size;   
+ }*/

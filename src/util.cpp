@@ -69,3 +69,12 @@ int path_is_mounted(const char *path)
 	snprintf(tmp, sizeof(tmp), "%s/..", path);
 	return (stat(tmp, &parent) == 0) && (parent.st_dev != st.st_dev);
 }
+
+//should be size_t?
+uint64_t getFilesize(const char* filename) {
+	struct stat st;
+	if(stat(filename, &st) != 0) {
+	    return 0;
+	}
+	return st.st_size;   
+ }
