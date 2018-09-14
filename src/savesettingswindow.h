@@ -61,6 +61,8 @@ private slots:
 
     void on_comboDrive_currentIndexChanged(const QString &arg1);
 
+    void on_chkEnableOverlay_toggled(bool checked);
+    
 private:
 	void refreshDriveList();
 	void updateBitrate();

@@ -25,6 +25,7 @@
 
 #include "savesettingswindow.h"
 #include "ui_savesettingswindow.h"
+#include "video.h"
 
 #include <cstring>
 
@@ -106,6 +107,10 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	ui->comboSaveFormat->setCurrentIndex(settings.value("recorder/saveFormat", 0).toUInt());
 
 	ui->comboSaveFormat->setEnabled(true);
+	
+	qDebug()<<"overlay status" << camera->vinst->getOverlayStatus();
+	ui->chkEnableOverlay->setChecked(camera->vinst->getOverlayStatus());
+	qDebug()<<"overlay status" << camera->vinst->getOverlayStatus();
 
 	if(ui->comboSaveFormat->currentIndex() == 0) {
 		ui->spinBitrate->setEnabled(true);
@@ -447,4 +452,10 @@ void saveSettingsWindow::setControlEnable(bool en){
 void saveSettingsWindow::on_comboDrive_currentIndexChanged(const QString &arg1)
 {
 	if(okToSaveLocation) saveFileDirectory();
+}
+
+void saveSettingsWindow::on_chkEnableOverlay_toggled(bool checked)
+{
+	if(checked) camera->vinst->setOverlay("%.6h/%.6z Sg=%g/ T=%.8Ss");
+	else camera->vinst->clearOverlay();
 }

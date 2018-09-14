@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>556</width>
-    <height>361</height>
+    <height>413</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -295,7 +295,7 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>240</y>
      <width>441</width>
      <height>161</height>
     </rect>
@@ -402,7 +402,7 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>300</y>
+     <y>350</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -420,7 +420,7 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>230</y>
+     <y>280</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -433,6 +433,33 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="text">
     <string>Safely
 Remove</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="chkEnableOverlay">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>185</y>
+     <width>461</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QCheckBox::indicator {
+     width: 40px;
+     height: 40px;
+}</string>
+   </property>
+   <property name="text">
+    <string>Enable Overlay for H.264 and TIFF formats</string>
+   </property>
+   <property name="tristate">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
