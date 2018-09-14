@@ -431,6 +431,10 @@ void saveSettingsWindow::on_comboSaveFormat_currentIndexChanged(int index)
 		ui->spinMaxBitrate->setEnabled(false);
 	}
 	updateBitrate();
+	if((index == SAVE_MODE_H264) && (index == SAVE_MODE_TIFF))
+		ui->chkEnableOverlay->setEnabled(true);
+	else
+		ui->chkEnableOverlay->setEnabled(false);
 	QSettings settings;
 	settings.setValue("recorder/saveFormat", ui->comboSaveFormat->currentIndex());
 }
