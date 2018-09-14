@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>556</width>
-    <height>413</height>
+    <height>361</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,27 +43,6 @@ QSpinBox::down-button { subcontrol-position: right; width: 40px; height: 35px;}<
    <property name="title">
     <string>Encoder</string>
    </property>
-   <widget class="QComboBox" name="comboLevel">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>140</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
-     </font>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -133,53 +112,6 @@ QSpinBox::down-button { subcontrol-position: right; width: 40px; height: 35px;}<
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboProfile">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>90</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
-     </font>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>120</y>
-      <width>141</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>h264 Level</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>70</y>
-      <width>141</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>h264 Profile</string>
     </property>
    </widget>
    <widget class="CamDoubleSpinBox" name="spinBitrate">
@@ -290,12 +222,40 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
      </font>
     </property>
    </widget>
+   <widget class="QCheckBox" name="chkEnableOverlay">
+    <property name="geometry">
+     <rect>
+      <x>365</x>
+      <y>110</y>
+      <width>151</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox::indicator {
+     width: 40px;
+     height: 40px;
+}</string>
+    </property>
+    <property name="text">
+     <string>Enable
+Overlay</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupLocation">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>240</y>
+     <y>190</y>
      <width>441</width>
      <height>161</height>
     </rect>
@@ -402,7 +362,7 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>350</y>
+     <y>300</y>
      <width>91</width>
      <height>51</height>
     </rect>
@@ -420,7 +380,7 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>280</y>
+     <y>230</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -435,31 +395,72 @@ QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 3
 Remove</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="chkEnableOverlay">
+  <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>185</y>
-     <width>461</width>
-     <height>41</height>
+     <x>620</x>
+     <y>150</y>
+     <width>141</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>h264 Level</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboLevel">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>170</y>
+     <width>151</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <pointsize>16</pointsize>
+     <weight>75</weight>
+     <italic>true</italic>
+     <bold>true</bold>
     </font>
    </property>
-   <property name="styleSheet">
-    <string notr="true">QCheckBox::indicator {
-     width: 40px;
-     height: 40px;
-}</string>
+  </widget>
+  <widget class="QComboBox" name="comboProfile">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>120</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <italic>true</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>100</y>
+     <width>141</width>
+     <height>17</height>
+    </rect>
    </property>
    <property name="text">
-    <string>Enable Overlay for H.264 and TIFF formats</string>
-   </property>
-   <property name="tristate">
-    <bool>false</bool>
+    <string>h264 Profile</string>
    </property>
   </widget>
  </widget>
