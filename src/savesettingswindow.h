@@ -37,7 +37,8 @@ public:
 	UInt32 framerate;
 	char filename[1000];
 	Camera * camera;
-
+	
+	void updateOverlayCheckboxCheckable();
 public slots:
 	void setControlEnable(bool en);
 private slots:
