@@ -368,7 +368,6 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, LUX1310 * senso
 	setFocusPeakEnable(appSettings.value("camera/focusPeak", false).toBool());
 	vinst->setDisplayOptions(getZebraEnable(), getFocusPeakEnable());
 	vinst->liveDisplay();
-	if(vinst->getOverlayStatus())	vinst->setOverlay("%.6h/%.6z Sg=%g/ T=%.8Ss");
 	setFocusPeakColorLL(getFocusPeakColor());
 	setFocusPeakThresholdLL(appSettings.value("camera/focusPeakThreshold", 25).toUInt());
 

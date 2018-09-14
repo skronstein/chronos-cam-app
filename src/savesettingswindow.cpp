@@ -460,6 +460,6 @@ void saveSettingsWindow::on_comboDrive_currentIndexChanged(const QString &arg1)
 
 void saveSettingsWindow::on_chkEnableOverlay_toggled(bool checked)
 {
-	if(checked) camera->vinst->setOverlay("%.6h/%.6z Sg=%g/ T=%.8Ss");
+	if(checked) camera->vinst->setOverlay("%.6h/%.6z Sg=%g/%i T=%.8Ss");
 	else camera->vinst->clearOverlay();
 }
