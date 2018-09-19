@@ -26,6 +26,8 @@ private slots:
 	
 	void on_cmdResetCustomWB_clicked();
 	
+	void on_spinGainFudgeFactor_valueChanged(double arg1);
+	
 private:
 	Ui::whiteBalanceDialog *ui;
 	Camera * camera;

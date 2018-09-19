@@ -21,6 +21,8 @@ whiteBalanceDialog::whiteBalanceDialog(QWidget *parent, Camera * cameraInst) :
 	sw = new StatusWindow;
 	QSettings appSettings;	
 	
+	ui->spinGainFudgeFactor->setValue(camera->GainFudgeFactor);
+	
 	addPreset(1.53, 1.00, 1.35, "8000K(Cloudy Sky)");
 	addPreset(1.42, 1.00, 1.46, "6500K(Noon Daylight)");
 	addPreset(1.35, 1.00, 1.584,"5600K(Avg Daylight)");
@@ -145,4 +147,10 @@ void whiteBalanceDialog::on_cmdResetCustomWB_clicked()
     if(ui->comboWB->currentIndex() == COMBO_MAX_INDEX)	camera->setCCMatrix();
     //qDebug() <<" colors: " << RED << GREEN << BLUE;
     //qDebug()<<"sceneWhiteBalPresets: " <<customWhiteBalOld[0] << customWhiteBalOld[1] << customWhiteBalOld[2];
+}
+
+void whiteBalanceDialog::on_spinGainFudgeFactor_valueChanged(double arg1)
+{
+	camera->GainFudgeFactor = arg1;
+	camera->setCCMatrix();
 }

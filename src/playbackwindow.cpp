@@ -83,6 +83,8 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 	}
 	
 	if(camera->vinst->getOverlayStatus())	camera->vinst->setOverlay("%.6h/%.6z Sg=%g/%i T=%.8Ss");
+	
+	ui->spinGainFudgeFactor->setValue(camera->GainFudgeFactor);
 }
 
 playbackWindow::~playbackWindow()
