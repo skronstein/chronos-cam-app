@@ -295,11 +295,11 @@ private:
 	ImagerSettings_t imagerSettings;
 	bool isColor;
 
-	// camSPECS CCM calculation: CIECAM02 RGB to sRGB & white balance
+	// camSPECS CCM calculation: CIECAM v3.2.4 RGB to sRGB & white balance
 	double colorCalMatrix[9] = {
-		+1.2330, +0.6468, -0.7764,
-		-0.3219, +1.6901, -0.3811,
-		-0.0614, -0.6409, +1.5258,
+		+1.2894, +1.2230, -1.3076,
+		-0.3379, +1.1573, +0.1290,
+		-0.0596, -0.8939, +1.7904,
 	};
 	double cameraWhiteBalMatrix[3] = { 1.15177, 1.09279, 1.0 };
 	double imgGain;
