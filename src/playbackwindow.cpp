@@ -526,3 +526,9 @@ void playbackWindow::on_cmdLoop_clicked()
 	unsigned int count = (markOutFrame - markInFrame + 1);
 	camera->vinst->loopPlayback(markInFrame, count, fps);
 }
+
+void playbackWindow::on_spinGainFudgeFactor_valueChanged(double arg1)
+{
+	camera->GainFudgeFactor = arg1;
+	camera->setCCMatrix();
+}

@@ -72,7 +72,9 @@ private slots:
 	void saveSettingsClosed();
 
 	void on_cmdLoop_clicked();
-
+	
+	void on_spinGainFudgeFactor_valueChanged(double arg1);
+	
 private:
 	Ui::playbackWindow *ui;
 	Camera * camera;
