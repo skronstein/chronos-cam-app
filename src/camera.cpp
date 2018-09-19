@@ -2394,7 +2394,8 @@ void Camera::setCCMatrix()
 	double RGBmin = min(Ro, min(Go, Bo));
 	
 	double Gain = 4095 / RGBmin;
-	Gain *= 1.1;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
+	qDebug()<<"Gain before FF = " << Gain;
+	Gain *= 1.00;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
 	qDebug()<<"RGBmin = " << RGBmin;
 	qDebug()<<"Gain = " << Gain;
 	qDebug()<<"imgGain = " << imgGain;
