@@ -2369,17 +2369,47 @@ Int32 Camera::startSave(UInt32 startFrame, UInt32 length)
 
 void Camera::setCCMatrix()
 {
-	gpmc->write16(CCM_11_ADDR, within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_12_ADDR, within((int)(4096.0 * colorCalMatrix[1] * imgGain * sceneWhiteBalMatrix[1]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_13_ADDR, within((int)(4096.0 * colorCalMatrix[2] * imgGain * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	double CCMatrix[9];
+	
+	qDebug()<<"setting CCMatrix";
+	for(int itr = 0; itr < 9; itr++){
+		CCMatrix[itr] = (4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr%3]);
+		qDebug()<<"CCMatrix[itr] = " << CCMatrix[itr];
+		qDebug()<<"colorCalMatrix[itr] = " << colorCalMatrix[itr];
+		qDebug()<<"sceneWhiteBalMatrix[itr%3] = " << sceneWhiteBalMatrix[itr%3];
+		qDebug()<<"";
+	}
+	
+	//Matrix multiply here RGB*CCMatrix
+	//Get Ro Go Bo (out)
+	double Ro = 0, Go = 0, Bo = 0;
+	for(int itr = 0; itr < 3; itr++){
+		Ro += 1.0 * CCMatrix[3*itr + 0];//had to use 1.0 * CCMatrix[], not Rs, Gs, Bs, or else absurdly large values would be assigned
+		Go += 1.0 * CCMatrix[3*itr + 1];
+		Bo += 1.0 * CCMatrix[3*itr + 2];
+		qDebug()<<CCMatrix[3*itr + 0];
+		qDebug()<<"RoGoBo " <<Ro <<Go <<Bo;
+	}
 
-	gpmc->write16(CCM_21_ADDR, within((int)(4096.0 * colorCalMatrix[3] * imgGain * sceneWhiteBalMatrix[0]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_22_ADDR, within((int)(4096.0 * colorCalMatrix[4] * imgGain * sceneWhiteBalMatrix[1]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_23_ADDR, within((int)(4096.0 * colorCalMatrix[5] * imgGain * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	double RGBmin = min(Ro, min(Go, Bo));
+	
+	double Gain = 4095 / RGBmin;
+	Gain *= 1.1;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
+	qDebug()<<"RGBmin = " << RGBmin;
+	qDebug()<<"Gain = " << Gain;
+	qDebug()<<"imgGain = " << imgGain;
+	
+	gpmc->write16(CCM_11_ADDR, within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_12_ADDR, within((int)(4096.0 * colorCalMatrix[1] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_13_ADDR, within((int)(4096.0 * colorCalMatrix[2] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 
-	gpmc->write16(CCM_31_ADDR, within((int)(4096.0 * colorCalMatrix[6] * imgGain * sceneWhiteBalMatrix[0]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_32_ADDR, within((int)(4096.0 * colorCalMatrix[7] * imgGain * sceneWhiteBalMatrix[1]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
-	gpmc->write16(CCM_33_ADDR, within((int)(4096.0 * colorCalMatrix[8] * imgGain * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_21_ADDR, within((int)(4096.0 * colorCalMatrix[3] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_22_ADDR, within((int)(4096.0 * colorCalMatrix[4] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_23_ADDR, within((int)(4096.0 * colorCalMatrix[5] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+
+	gpmc->write16(CCM_31_ADDR, within((int)(4096.0 * colorCalMatrix[6] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_32_ADDR, within((int)(4096.0 * colorCalMatrix[7] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+	gpmc->write16(CCM_33_ADDR, within((int)(4096.0 * colorCalMatrix[8] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 
 	qDebug() << "Blue matrix" << within((int)(4096.0 * colorCalMatrix[6] * cameraWhiteBalMatrix[2] * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
 			<< within((int)(4096.0 * colorCalMatrix[7] * cameraWhiteBalMatrix[2] * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
