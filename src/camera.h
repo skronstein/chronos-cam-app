@@ -297,9 +297,7 @@ private:
 
 	// camSPECS CCM calculation: CIECAM v3.2.4 RGB to sRGB & white balance
 	double colorCalMatrix[9] = {
-		+1.2894, +1.2230, -1.3076,
-		-0.3379, +1.1573, +0.1290,
-		-0.0596, -0.6874, +1.6558,
+		1.0731, +1.5327, -1.4010, -0.2736, 1.0650, 0.1569, -0.1077, -0.6006, 1.6172
 	};
 	double cameraWhiteBalMatrix[3] = { 1.15177, 1.09279, 1.0 };
 	double imgGain;
