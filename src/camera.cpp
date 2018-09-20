@@ -2417,9 +2417,18 @@ void Camera::setCCMatrix()
 	gpmc->write16(CCM_32_ADDR, within((int)(4096.0 * colorCalMatrix[7] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 	gpmc->write16(CCM_33_ADDR, within((int)(4096.0 * colorCalMatrix[8] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 
-	qDebug() << "Blue matrix" << within((int)(4096.0 * colorCalMatrix[6] * cameraWhiteBalMatrix[2] * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
-			<< within((int)(4096.0 * colorCalMatrix[7] * cameraWhiteBalMatrix[2] * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
-			<< within((int)(4096.0 * colorCalMatrix[8] * cameraWhiteBalMatrix[2] * sceneWhiteBalMatrix[2]), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+	qDebug() << "R matrix"
+		     << within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[1] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[2] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+	qDebug() << "G matrix"
+		     << within((int)(4096.0 * colorCalMatrix[3] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[4] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[5] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+	qDebug() << "B matrix"
+		     << within((int)(4096.0 * colorCalMatrix[6] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[7] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
+			<< within((int)(4096.0 * colorCalMatrix[8] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
 }
 
 Int32 Camera::setWhiteBalance(UInt32 x, UInt32 y)
