@@ -2390,8 +2390,13 @@ void Camera::setCCMatrix()
 		qDebug()<<CCMatrix[3*itr + 0];
 		qDebug()<<"RoGoBo " <<Ro <<Go <<Bo;
 	}
+	double RoGoBo[3] = {0, 0, 0};
+	for(int itr = 0; itr<9; itr++){
+		RoGoBo[itr%3] += CCMatrix[itr];//which to use: %3 or /3 ?
+	}
 
 	double RGBmin = min(Ro, min(Go, Bo));
+	RGBmin = min(RoGoBo[0], min(RoGoBo[2], RoGoBo[3]));//comment out this line to use old RoGoBo calculation
 	
 	double Gain = 4095 / RGBmin;
 	qDebug()<<"Gain before FF = " << Gain;
