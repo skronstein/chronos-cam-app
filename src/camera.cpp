@@ -2382,21 +2382,12 @@ void Camera::setCCMatrix()
 	
 	//Matrix multiply here RGB*CCMatrix
 	//Get Ro Go Bo (out)
-	double Ro = 0, Go = 0, Bo = 0;
-	for(int itr = 0; itr < 3; itr++){
-		Ro += 1.0 * CCMatrix[3*itr + 0];//had to use 1.0 * CCMatrix[], not Rs, Gs, Bs, or else absurdly large values would be assigned
-		Go += 1.0 * CCMatrix[3*itr + 1];
-		Bo += 1.0 * CCMatrix[3*itr + 2];
-		qDebug()<<CCMatrix[3*itr + 0];
-		qDebug()<<"RoGoBo " <<Ro <<Go <<Bo;
-	}
 	double RoGoBo[3] = {0, 0, 0};
 	for(int itr = 0; itr<9; itr++){
 		RoGoBo[itr%3] += CCMatrix[itr];//which to use: %3 or /3 ?
 	}
 
-	double RGBmin = min(Ro, min(Go, Bo));
-	RGBmin = min(RoGoBo[0], min(RoGoBo[2], RoGoBo[3]));//comment out this line to use old RoGoBo calculation
+	double RGBmin = min(RoGoBo[0], min(RoGoBo[2], RoGoBo[3]));
 	
 	double Gain = 4095 / RGBmin;
 	qDebug()<<"Gain before FF = " << Gain;
