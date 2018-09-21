@@ -2395,7 +2395,7 @@ void Camera::setCCMatrix()
 	qDebug()<<"RGBmin = " << RGBmin;
 	qDebug()<<"Gain = " << Gain;
 	qDebug()<<"imgGain = " << imgGain;
-	
+	/*
 	gpmc->write16(CCM_11_ADDR, within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 	gpmc->write16(CCM_12_ADDR, within((int)(4096.0 * colorCalMatrix[1] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 	gpmc->write16(CCM_13_ADDR, within((int)(4096.0 * colorCalMatrix[2] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
@@ -2420,6 +2420,18 @@ void Camera::setCCMatrix()
 		     << within((int)(4096.0 * colorCalMatrix[6] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
 			<< within((int)(4096.0 * colorCalMatrix[7] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1)
 			<< within((int)(4096.0 * colorCalMatrix[8] * imgGain * sceneWhiteBalMatrix[2] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+	*/
+	qDebug()<<"";
+	short ccmAdressMatrix[9] = {CCM_11_ADDR, CCM_12_ADDR, CCM_13_ADDR, CCM_21_ADDR, CCM_22_ADDR, CCM_23_ADDR, CCM_31_ADDR, CCM_32_ADDR, CCM_33_ADDR};
+	for(int itr = 0; itr < 9; itr++){
+		if(itr%3==0) qDebug()<<"";
+		gpmc->write16(ccmAdressMatrix[itr], within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+		//qDebug()<<"finalmatrix " << itr << " is "     << 4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain;
+		qDebug()<<"finalmatrix " 
+			  << within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+			   
+	}		
+	qDebug()<<"";
 }
 
 Int32 Camera::setWhiteBalance(UInt32 x, UInt32 y)
