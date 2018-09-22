@@ -2425,7 +2425,7 @@ void Camera::setCCMatrix()
 	short ccmAdressMatrix[9] = {CCM_11_ADDR, CCM_12_ADDR, CCM_13_ADDR, CCM_21_ADDR, CCM_22_ADDR, CCM_23_ADDR, CCM_31_ADDR, CCM_32_ADDR, CCM_33_ADDR};
 	for(int itr = 0; itr < 9; itr++){
 		if(itr%3==0) qDebug()<<"";
-		gpmc->write16(ccmAdressMatrix[itr], within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+		gpmc->write16(ccmAdressMatrix[itr], within((int)(4096.0 * colorCalMatrix[(itr%3)*3 + itr/3] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 		//qDebug()<<"finalmatrix " << itr << " is "     << 4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain;
 		qDebug()<<"finalmatrix " 
 			  << within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
