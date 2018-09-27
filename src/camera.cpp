@@ -2384,7 +2384,7 @@ void Camera::setCCMatrix()
 	//Get Ro Go Bo (out)
 	double RoGoBo[3] = {0, 0, 0};
 	for(int itr = 0; itr<9; itr++){
-		RoGoBo[itr%3] += CCMatrix[itr];//which to use: %3 or /3 ?
+		RoGoBo[itr/3] += CCMatrix[itr];//which to use: %3 or /3 ?
 	}
 
 	double RGBmin = min(RoGoBo[0], min(RoGoBo[2], RoGoBo[3]));
@@ -2393,7 +2393,9 @@ void Camera::setCCMatrix()
 	qDebug()<<"Gain before FF = " << Gain;
 	Gain *= GainFudgeFactor;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
 	qDebug()<<"RGBmin = " << RGBmin;
-	qDebug()<<"Gain = " << Gain;
+	qDebug()<<"Gain = " << Gain << "(calculated)";
+	Gain = within(Gain, 1, 4);
+	qDebug()<<"Gain = " << Gain << "(within)";
 	qDebug()<<"imgGain = " << imgGain;
 	/*
 	gpmc->write16(CCM_11_ADDR, within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
@@ -2425,10 +2427,10 @@ void Camera::setCCMatrix()
 	short ccmAdressMatrix[9] = {CCM_11_ADDR, CCM_12_ADDR, CCM_13_ADDR, CCM_21_ADDR, CCM_22_ADDR, CCM_23_ADDR, CCM_31_ADDR, CCM_32_ADDR, CCM_33_ADDR};
 	for(int itr = 0; itr < 9; itr++){
 		if(itr%3==0) qDebug()<<"";
-		gpmc->write16(ccmAdressMatrix[itr], within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
+		gpmc->write16(ccmAdressMatrix[itr], within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr%3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 		//qDebug()<<"finalmatrix " << itr << " is "     << 4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain;
 		qDebug()<<"finalmatrix " 
-			  << within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr/3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
+			  << within((int)(4096.0 * colorCalMatrix[itr] * imgGain * sceneWhiteBalMatrix[itr%3] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1);
 			   
 	}		
 	qDebug()<<"";
