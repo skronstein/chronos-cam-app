@@ -2390,13 +2390,13 @@ void Camera::setCCMatrix()
 	double RGBmin = min(RoGoBo[0], min(RoGoBo[2], RoGoBo[3]));
 	
 	double Gain = 4095 / RGBmin;
-	qDebug()<<"Gain before FF = " << Gain;
-	Gain *= GainFudgeFactor;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
 	qDebug()<<"RGBmin = " << RGBmin;
+	qDebug()<<"imgGain = " << imgGain;
 	qDebug()<<"Gain = " << Gain << "(calculated)";
 	Gain = within(Gain, 1, 4);
-	qDebug()<<"Gain = " << Gain << "(within)";
-	qDebug()<<"imgGain = " << imgGain;
+	qDebug()<<"Gain = " << Gain << "(before FF)";
+	Gain *= GainFudgeFactor;//fudge factor to reduce noise in overexposed areas and/or a lightly colored ring around overexposed areas
+	qDebug()<<"Gain = " << Gain << "(final)";
 	/*
 	gpmc->write16(CCM_11_ADDR, within((int)(4096.0 * colorCalMatrix[0] * imgGain * sceneWhiteBalMatrix[0] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
 	gpmc->write16(CCM_12_ADDR, within((int)(4096.0 * colorCalMatrix[1] * imgGain * sceneWhiteBalMatrix[1] * Gain), -COLOR_MATRIX_MAXVAL, COLOR_MATRIX_MAXVAL-1));
