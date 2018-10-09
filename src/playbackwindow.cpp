@@ -101,6 +101,14 @@ playbackWindow::~playbackWindow()
 
 void playbackWindow::videoStarted(VideoState state)
 {
+	qDebug()<<"videoStarted - will reenable save/abort button";
+	ui->cmdSave->setText("Abort\nSave");
+	ui->cmdSave->setEnabled(true);
+	
+	saveDoneTimer = new QTimer(this);
+	connect(saveDoneTimer, SIGNAL(timeout()), this, SLOT(checkForSaveDone()));
+	saveDoneTimer->start(100);
+
 	/* When starting a filesave, increase the frame timing for maximum speed */
 	if (state == VIDEO_STATE_FILESAVE) {
 		camera->recordingData.hasBeenSaved = true;
@@ -294,14 +302,10 @@ void playbackWindow::on_cmdSave_clicked()
 				return;
 			}
 
-			ui->cmdSave->setText("Abort\nSave");
+			ui->cmdSave->setEnabled(false);
 			setControlEnable(false);
 			sw->setText("Saving...");
 			sw->show();
-
-			saveDoneTimer = new QTimer(this);
-			connect(saveDoneTimer, SIGNAL(timeout()), this, SLOT(checkForSaveDone()));
-			saveDoneTimer->start(100);
 
 			/* Prevent the user from pressing the abort/save button just after the last frame,
 			 * as that can make the camera try to save a 2nd video too soon, crashing the camapp.
