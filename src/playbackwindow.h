@@ -99,6 +99,8 @@ private:
 	bool saveAborted;
 	bool insufficientFreeSpaceEstimate;
 	
+	QTime abc;
+	
 	save_mode_type getSaveFormat();
 
 signals:
