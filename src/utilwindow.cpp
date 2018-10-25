@@ -151,26 +151,32 @@ UtilWindow::~UtilWindow()
 
 void UtilWindow::on_cmdSWUpdate_clicked()
 {
-	int retval = updateSoftware("/media/sda1/camUpdate/update.sh");
-	qDebug()<<"update software: " << retval;
-	if(retval == USER_EXIT) return;
+	int itr, retval;
+	char location[100];
 	
-	retval = updateSoftware("/media/sda2/camUpdate/update.sh");
-	qDebug()<<"update software: " << retval;
-	if(retval == USER_EXIT) return;
+	//Look for the update on sda
+	for(itr=0; itr<4; itr++){
+		sprintf(location, "/media/sda%d/camUpdate/update.sh", itr);
+		retval = updateSoftware(location);
+		qDebug()<<"update software: " << retval;
+		if(retval == USER_EXIT) return;
+	}
 	
-	retval = updateSoftware("/media/sdb1/camUpdate/update.sh");
-	qDebug()<<"update software: " << retval;
-	if(retval == USER_EXIT) return;
-
-	retval = updateSoftware("/media/sdb2/camUpdate/update.sh");
-	qDebug()<<"update software: " << retval;
-	if(retval == USER_EXIT) return;
+	//Also look for the update on sdb, as the usb is sometimes mounted there instead of sda
+	for(itr=0; itr<4; itr++){
+		sprintf(location, "/media/sdb%d/camUpdate/update.sh", itr);
+		retval = updateSoftware(location);
+		qDebug()<<"update software: " << retval;
+		if(retval == USER_EXIT) return;
+	}
 	
-	retval = updateSoftware("/media/mmcblk1p1/camUpdate/update.sh");
-	qDebug()<<"update software: " << retval;
-	if(retval == USER_EXIT) return;
-	
+	//Look for the update on the SD card
+	for(itr=0; itr<4; itr++){
+		sprintf(location, "/media/mmcblk1p%d/camUpdate/update.sh", itr);
+		retval = updateSoftware(location);
+		qDebug()<<"update software: " << retval;
+		if(retval == USER_EXIT) return;
+	}
 	
 	//qDebug()<<"CAMERA_FILE_NOT_FOUND: " << CAMERA_FILE_NOT_FOUND;
 	
@@ -186,6 +192,7 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 int UtilWindow::updateSoftware(char * updateLocation){
 	struct stat buffer;
 	char mesg[100];
+	qDebug()<<"location: " << updateLocation;
 
 	if(stat (updateLocation, &buffer) == 0)	//If file exists
 	{
