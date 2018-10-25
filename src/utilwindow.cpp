@@ -155,7 +155,7 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 	char location[100];
 	
 	//Look for the update on sda
-	for(itr=0; itr<4; itr++){
+	for(itr = 1; itr <= 4; itr++){
 		sprintf(location, "/media/sda%d/camUpdate/update.sh", itr);
 		retval = updateSoftware(location);
 		qDebug()<<"update software: " << retval;
@@ -163,7 +163,7 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 	}
 	
 	//Also look for the update on sdb, as the usb is sometimes mounted there instead of sda
-	for(itr=0; itr<4; itr++){
+	for(itr = 1; itr <= 4; itr++){
 		sprintf(location, "/media/sdb%d/camUpdate/update.sh", itr);
 		retval = updateSoftware(location);
 		qDebug()<<"update software: " << retval;
@@ -171,7 +171,7 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 	}
 	
 	//Look for the update on the SD card
-	for(itr=0; itr<4; itr++){
+	for(itr = 1; itr <= 4; itr++){
 		sprintf(location, "/media/mmcblk1p%d/camUpdate/update.sh", itr);
 		retval = updateSoftware(location);
 		qDebug()<<"update software: " << retval;
