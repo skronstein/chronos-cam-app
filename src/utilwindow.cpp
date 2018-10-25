@@ -37,6 +37,8 @@
 #define FOCUS_PEAK_THRESH_MED	25
 #define FOCUS_PEAK_THRESH_HIGH	15
 
+#define USER_EXIT -2
+
 extern const char* git_version_str;
 
 bool copyFile(const char * fromfile, const char * tofile);
@@ -149,27 +151,30 @@ UtilWindow::~UtilWindow()
 
 void UtilWindow::on_cmdSWUpdate_clicked()
 {
+	int retval = updateSoftware("/media/sda1/camUpdate/update.sh");
+	qDebug()<<"update software: " << retval;
+	if(retval == USER_EXIT) return;
+	
+	retval = updateSoftware("/media/sda2/camUpdate/update.sh");
+	qDebug()<<"update software: " << retval;
+	if(retval == USER_EXIT) return;
+	
+	retval = updateSoftware("/media/sdb1/camUpdate/update.sh");
+	qDebug()<<"update software: " << retval;
+	if(retval == USER_EXIT) return;
 
-	struct stat buffer;
-	char mesg[100];
-
-	if(stat ("/media/sda1/camUpdate/update.sh", &buffer) == 0)	//If file exists
-	{
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::question(this, "Software update", "Found software update, do you want to install it now?\r\nThe display may go blank and the camera may restart during this process.\r\nWARNING: Any unsaved video in RAM will be lost.", QMessageBox::Yes|QMessageBox::No);
-		if(QMessageBox::Yes != reply)
-			return;
-
-		UInt32 retVal = system("/media/sda1/camUpdate/update.sh");
-		QMessageBox msg;
-		sprintf(mesg, "Update complete! Please restart camera to complete update.");
-		msg.setText(mesg);
-		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
-		msg.exec();
-		return;
-	}
-	else
-	{
+	retval = updateSoftware("/media/sdb2/camUpdate/update.sh");
+	qDebug()<<"update software: " << retval;
+	if(retval == USER_EXIT) return;
+	
+	retval = updateSoftware("/media/mmcblk1p1/camUpdate/update.sh");
+	qDebug()<<"update software: " << retval;
+	if(retval == USER_EXIT) return;
+	
+	
+	//qDebug()<<"CAMERA_FILE_NOT_FOUND: " << CAMERA_FILE_NOT_FOUND;
+	
+	if(retval == CAMERA_FILE_NOT_FOUND){
 		QMessageBox msg;
 		msg.setText("No software update found");
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -178,6 +183,27 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 	}
 }
 
+int UtilWindow::updateSoftware(char * updateLocation){
+	struct stat buffer;
+	char mesg[100];
+
+	if(stat (updateLocation, &buffer) == 0)	//If file exists
+	{
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::question(this, "Software update", "Found software update, do you want to install it now?\r\nThe display may go blank and the camera may restart during this process.\r\nWARNING: Any unsaved video in RAM will be lost.", QMessageBox::Yes|QMessageBox::No);
+		if(QMessageBox::Yes != reply)
+			return USER_EXIT;
+
+		UInt32 retVal = system(updateLocation);
+		QMessageBox msg;
+		sprintf(mesg, "Update complete! Please restart camera to complete update.");
+		msg.setText(mesg);
+		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
+		msg.exec();
+		return SUCCESS;
+	}
+	return CAMERA_FILE_NOT_FOUND;
+}
 bool copyFile(const char * fromfile, const char * tofile)
 {
 
