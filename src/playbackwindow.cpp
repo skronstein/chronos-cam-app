@@ -321,6 +321,11 @@ void playbackWindow::on_cmdSave_clicked()
 		if (stat(camera->vinst->fileDirectory, &sb) == 0 && S_ISDIR(sb.st_mode) &&
 				stat(parentPath, &sbP) == 0 && sb.st_dev != sbP.st_dev)		//If location is directory and is a mount point (device ID of parent is different from device ID of path)
 		{
+			/*If this string contains "autosave", mkfilename in vinst will know
+			that it has to use autoname to avoid naming conflicts with any previous files*/
+			if(autoSaveFlag) strcpy(camera->vinst->filename, "autosave");
+			qDebug()<<"autoSaveFlag: " << autoSaveFlag;
+			
 			ret = camera->vinst->startRecording((hRes + 15) & 0xFFFFFFF0, vRes, markInFrame - 1, markOutFrame - markInFrame + 1, format);
 			if (RECORD_FILE_EXISTS == ret) {
 				msg.setText("File already exists. Rename then try saving again.");

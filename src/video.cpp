@@ -278,7 +278,7 @@ int Video::mkfilename(char *path, save_mode_type save_mode)
 
 	strcpy(path, fileDirectory);
 
-	if(strlen(filename) == 0)
+	if(strlen(filename) == 0 || strstr(filename,"autosave") != NULL)
 	{
 		//Fill timeinfo structure with the current time
 		time_t rawtime;
