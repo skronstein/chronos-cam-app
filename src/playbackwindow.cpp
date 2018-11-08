@@ -153,6 +153,7 @@ void playbackWindow::videoEnded(VideoState state, QString err)
 		sw->close();
 		ui->cmdSave->setText("Save");
 		saveAborted = false;
+		autoSaveFlag = false;
 		updatePlayRateLabel();
 		ui->verticalSlider->setHighlightRegion(markInFrame, markOutFrame);
 		
@@ -368,7 +369,6 @@ void playbackWindow::on_cmdSave_clicked()
 		ui->verticalSlider->removeLastRegionFromList();
 		ui->verticalSlider->setHighlightRegion(markInFrame, markOutFrame);
 		saveAborted = true;
-		autoSaveFlag = false;
 		autoRecordFlag = false;
 		updateSWText();
 	}
