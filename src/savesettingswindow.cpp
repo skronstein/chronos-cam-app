@@ -34,6 +34,8 @@
 #include <QDebug>
 #include <QSettings>
 
+#define USE_AUTONAME_FOR_SAVE ""
+
 //Defining this here because something in the preprocessor undefines this somewhere up above
 #define min(a,b) \
    ({ __typeof__ (a) _a = (a); \
@@ -59,7 +61,7 @@ saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 
 	if(camera->autoSave){
 		ui->lineFilename->setEnabled(false);
-		ui->lineFilename->setText("");
+		ui->lineFilename->setText(USE_AUTONAME_FOR_SAVE);
 	}
 	
 	refreshDriveList();

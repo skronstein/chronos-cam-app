@@ -31,6 +31,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#define USE_AUTONAME_FOR_SAVE ""
 #define MIN_FREE_SPACE 20000000
 
 playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosave) :
@@ -86,7 +87,7 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 	if(autoSaveFlag) {
 		/*If this string is empty, mkfilename in vinst will know
 		that it has to use autoname to avoid naming conflicts with any previous files*/
-		strcpy(camera->vinst->filename, "");
+		strcpy(camera->vinst->filename, USE_AUTONAME_FOR_SAVE);
 
 		on_cmdSave_clicked();
 	}
