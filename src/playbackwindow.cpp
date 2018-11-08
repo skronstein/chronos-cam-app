@@ -90,6 +90,8 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 		strcpy(camera->vinst->filename, USE_AUTONAME_FOR_SAVE);
 
 		on_cmdSave_clicked();
+	} else {
+		strcpy(camera->vinst->filename, appSettings.value("recorder/filename", "").toString().toAscii());
 	}
 	
 	if(camera->vinst->getOverlayStatus())	camera->vinst->setOverlay("%.6h/%.6z Sg=%g/%i T=%.8Ss");
