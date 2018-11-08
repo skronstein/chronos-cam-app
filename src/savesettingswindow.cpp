@@ -413,8 +413,7 @@ void saveSettingsWindow::updateDrives(void)
 
 void saveSettingsWindow::on_lineFilename_textEdited(const QString &arg1)
 {
-	qDebug()<<"on_lineFilename_textEdited()";
-	if(camera->autoSave) return; //If autosave is enabled, autoname will be used, don't show any filename, since autoname will be used anyway
+	if(camera->autoSave) return; //Keep blank filename to use autoname
 	QSettings settings;
 	strcpy(camera->vinst->filename, ui->lineFilename->text().toStdString().c_str());
 	settings.setValue("recorder/filename", camera->vinst->filename);

@@ -277,9 +277,6 @@ int Video::mkfilename(char *path, save_mode_type save_mode)
 		return RECORD_NO_DIRECTORY_SET;
 
 	strcpy(path, fileDirectory);
-	qDebug()<<"strlen(filename) = "<<strlen(filename);
-	qDebug()<<"strstr(filename,autosave) = "<<strstr(filename,"autosave");
-	qDebug()<<"strstr(filename,autosave) != NULL = "<<QString::number(strstr(filename,"autosave") != NULL);
 	if(strlen(filename) == 0)
 	{
 		//Fill timeinfo structure with the current time
