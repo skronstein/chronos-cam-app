@@ -130,8 +130,10 @@ CamMainWindow::CamMainWindow(QWidget *parent) :
 		camera->upsideDownTransform(2);//2 for upside down, 0 for normal
 	} else  camera->UpsideDownDisplay = false;//if the rotation argument has not been added, this should be set to false
 
+	qDebug()<<"about to check if updateVideoPosition() is necessary";
 	if( (camera->ButtonsOnLeft) ^ (camera->UpsideDownDisplay) ){
 		camera->updateVideoPosition();
+		qDebug()<<"about to updateVideoPosition()";
 	}
 
 	//record the number of widgets that are open before any other windows can be opened
